@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ג'רזי קינג — חנות גופיות כדורגל</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+  }
+}
+</script>
+<style>
+/* ── Next.js Commerce Design System ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#fafafa;--bg3:#f5f5f5;
+  --border:#e5e5e5;--border2:#d4d4d4;
+  --text:#171717;--text2:#737373;--text3:#a3a3a3;
+  --accent:#c8102e;--accent2:#a50d25;
+  --nav-h:60px;--r:8px;--r-lg:12px;--r-full:9999px;--ease:.2s ease;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Rubik',sans-serif;background:var(--bg);color:var(--text);direction:rtl;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}img{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.page{display:none}.page.active{display:block}
+
+/* NAV */
+.nav{position:fixed;top:0;inset-inline:0;z-index:100;height:var(--nav-h);background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;gap:1rem}
+.nav-logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap;cursor:pointer}
+.nav-logo em{font-style:normal;color:var(--accent)}
+.nav-links{display:flex;gap:.125rem;flex:1;justify-content:center}
+.nav-links a{font-size:.875rem;font-weight:500;color:var(--text2);padding:.4rem .875rem;border-radius:var(--r-full);transition:color var(--ease),background var(--ease);cursor:pointer}
+.nav-links a:hover{color:var(--text);background:var(--bg3)}
+.nav-right{display:flex;align-items:center;gap:.5rem}
+.nav-cart{position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-full);border:1px solid var(--border);color:var(--text);transition:var(--ease)}
+.nav-cart:hover{border-color:var(--border2);background:var(--bg3)}
+.cart-count{position:absolute;top:-4px;left:-4px;background:var(--accent);color:#fff;font-size:.6rem;font-weight:700;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid var(--bg)}
+.cart-count.show{display:flex}
+.nav-shop-btn{padding:.45rem 1rem;background:var(--text);color:#fff;border-radius:var(--r-full);font-size:.8rem;font-weight:600;transition:opacity var(--ease)}
+.nav-shop-btn:hover{opacity:.8}
+.nav-toggle{width:36px;height:36px;display:none;align-items:center;justify-content:center;border-radius:var(--r-full);border:1px solid var(--border);color:var(--text)}
+.mobile-nav{display:none;background:var(--bg);border-top:1px solid var(--border);padding:.75rem 1.5rem 1rem}
+.mobile-nav a{display:block;padding:.625rem 0;font-weight:500;color:var(--text2);border-bottom:1px solid var(--border);cursor:pointer}
+.mobile-nav a:last-child{border:none}
+@media(max-width:768px){.nav-links,.nav-shop-btn{display:none}.nav-toggle{display:flex}.mobile-nav.open{display:block}}
+
+/* CART DRAWER */
+.cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200}
+.cart-overlay.open{display:block}
+.cart-drawer{position:fixed;top:0;bottom:0;left:0;right:auto;width:100%;max-width:390px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-right:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .3s ease}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.cart-head h2{font-size:1rem;font-weight:700}
+.cart-close{width:32px;height:32px;border-radius:var(--r-full);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:.875rem;transition:var(--ease)}
+.cart-close:hover{background:var(--bg3);color:var(--text)}
+.cart-items{flex:1;overflow-y:auto;padding:0 1.5rem}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:var(--text2);font-size:.875rem;gap:.625rem;text-align:center}
+.cart-item{display:flex;gap:.875rem;align-items:flex-start;padding:.875rem 0;border-bottom:1px solid var(--border)}
+.cart-item:last-child{border:none}
+.cart-item img{width:64px;height:64px;border-radius:var(--r);border:1px solid var(--border);object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-info h4{font-size:.8rem;font-weight:600;margin-bottom:.15rem;line-height:1.3}
+.cart-item-info p{font-size:.75rem;color:var(--text2)}
+.cart-item-price{font-size:.875rem;font-weight:700;margin-top:.2rem}
+.cart-item-remove{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:.75rem;flex-shrink:0;transition:var(--ease);margin-top:.1rem}
+.cart-item-remove:hover{border-color:var(--accent);color:var(--accent);background:#fff0f0}
+.cart-foot{padding:1.25rem 1.5rem;border-top:1px solid var(--border)}
+.cart-foot-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem;font-size:.875rem;color:var(--text2)}
+.cart-foot-total strong{font-size:1.1rem;color:var(--text);font-weight:800}
+.cart-checkout{width:100%;padding:.875rem;font-size:.875rem;font-weight:700;background:var(--text);color:#fff;border-radius:var(--r-full);transition:opacity var(--ease)}
+.cart-checkout:hover{opacity:.8}
+
+/* BUTTONS */
+.btn-black{background:var(--text);color:#fff;padding:.75rem 1.5rem;border-radius:var(--r-full);font-size:.875rem;font-weight:600;transition:opacity var(--ease)}
+.btn-black:hover{opacity:.8}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border);padding:.75rem 1.5rem;border-radius:var(--r-full);font-size:.875rem;font-weight:500;transition:var(--ease)}
+.btn-outline:hover{border-color:var(--border2);background:var(--bg3)}
+
+/* HERO */
+.hero{padding-top:var(--nav-h);background:var(--bg);overflow:hidden;border-bottom:1px solid var(--border)}
+.hero-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;min-height:calc(90vh - var(--nav-h));align-items:stretch}
+@media(max-width:860px){.hero-inner{grid-template-columns:1fr}.hero-visual{display:none}}
+.hero-content{padding:4rem 3rem 4rem 2rem;display:flex;flex-direction:column;justify-content:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.5rem}
+.hero-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--accent)}
+.hero-content h1{font-size:clamp(2.4rem,4.5vw,3.8rem);font-weight:800;line-height:1.08;letter-spacing:-.04em;margin-bottom:1.25rem}
+.hero-content h1 em{font-style:normal;color:var(--accent)}
+.hero-content p{font-size:1rem;color:var(--text2);max-width:420px;margin-bottom:2rem;line-height:1.7}
+.hero-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border)}
+.hero-stat-num{font-size:1.5rem;font-weight:800;line-height:1}
+.hero-stat-lbl{font-size:.75rem;color:var(--text2);margin-top:.25rem}
+.hero-visual{background:var(--bg3);border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.hero-visual img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.hero-visual-badge{position:absolute;bottom:1.5rem;right:1.5rem;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--r-lg);padding:.875rem 1.125rem}
+.hero-visual-badge small{font-size:.7rem;color:var(--text2);display:block;margin-bottom:.2rem}
+.hero-visual-badge strong{font-size:.95rem;font-weight:700;display:block}
+.hero-visual-badge span{font-size:.875rem;font-weight:800;color:var(--accent)}
+
+/* SECTION */
+.section{padding:4rem 1.5rem;max-width:1400px;margin:0 auto}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2rem}
+.section-head h2{font-size:1.25rem;font-weight:800;letter-spacing:-.02em}
+.section-head a{font-size:.8rem;color:var(--text2);cursor:pointer;transition:color var(--ease)}
+.section-head a:hover{color:var(--text)}
+
+/* CATS */
+.cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+@media(max-width:640px){.cats-grid{grid-template-columns:repeat(2,1fr)}}
+.cat-card{background:var(--bg);padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:background var(--ease)}
+.cat-card:hover{background:var(--bg2)}
+.cat-flag{font-size:2rem;margin-bottom:.625rem}
+.cat-name{font-size:.875rem;font-weight:700;margin-bottom:.15rem}
+.cat-sub{font-size:.75rem;color:var(--text2)}
+
+/* PRODUCT GRID — Next.js Commerce style */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.prod-card{background:var(--bg);cursor:pointer;display:flex;flex-direction:column;transition:background var(--ease)}
+.prod-card:hover{background:var(--bg2)}
+.prod-img-wrap{position:relative;overflow:hidden;aspect-ratio:1;background:var(--bg3)}
+.prod-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease-in-out}
+.prod-card:hover .prod-img-wrap img{transform:scale(1.05)}
+.prod-badge{position:absolute;top:.625rem;right:.625rem;font-size:.65rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-full)}
+.badge-hot{background:var(--accent);color:#fff}.badge-retro{background:#78350f;color:#fff}.badge-new{background:var(--text);color:#fff}.badge-sale{background:#d97706;color:#fff}
+.prod-info{padding:.875rem 1rem 1rem;flex:1;display:flex;flex-direction:column}
+.prod-team{font-size:.65rem;color:var(--text2);margin-bottom:.25rem;display:flex;align-items:center;gap:.3rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.prod-team-logo{width:14px;height:14px;object-fit:contain}
+.prod-name{font-size:.875rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.5rem}
+.prod-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.prod-price{font-size:.95rem;font-weight:800}
+.prod-add-btn{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--text2);transition:var(--ease)}
+.prod-add-btn:hover{background:var(--text);color:#fff;border-color:var(--text)}
+
+/* RETRO BANNER */
+.retro-banner{background:#0a0a0a;color:#fff;padding:4rem 1.5rem;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a}
+.retro-banner-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:4rem;align-items:center}
+@media(max-width:720px){.retro-banner-inner{grid-template-columns:1fr}.retro-trophy{display:none}}
+.retro-tag{font-size:.65rem;font-weight:700;color:#d97706;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.875rem}
+.retro-banner h2{font-size:2rem;font-weight:800;line-height:1.1;margin-bottom:.875rem;letter-spacing:-.03em}
+.retro-banner p{color:#737373;line-height:1.7;margin-bottom:1.5rem;font-size:.9rem;max-width:480px}
+.btn-gold{background:#d97706;color:#fff;padding:.75rem 1.5rem;border-radius:var(--r-full);font-size:.875rem;font-weight:600;transition:background var(--ease)}
+.btn-gold:hover{background:#b45309}
+.retro-trophy{font-size:5rem;opacity:.6}
+
+/* WHY US */
+.why-section{background:var(--bg);padding:4rem 1.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.why-inner{max-width:1400px;margin:0 auto}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+@media(max-width:640px){.why-grid{grid-template-columns:1fr}}
+.why-card{background:var(--bg);padding:1.75rem}
+.why-icon{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:.875rem;margin-bottom:1rem;color:var(--text2)}
+.why-card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
+.why-card p{font-size:.8rem;color:var(--text2);line-height:1.6}
+
+/* STORE */
+.store-header{background:var(--bg);border-bottom:1px solid var(--border);padding-top:var(--nav-h)}
+.store-header-inner{max-width:1400px;margin:0 auto;padding:1.5rem 1.5rem .75rem}
+.store-header-inner h1{font-size:1.4rem;font-weight:800;letter-spacing:-.02em}
+.store-header-inner p{color:var(--text2);font-size:.8rem;margin-top:.2rem}
+.filters-bar{background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:var(--nav-h);z-index:10}
+.filters-inner{max-width:1400px;margin:0 auto;padding:.75rem 1.5rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.f-input{border:1px solid var(--border);border-radius:var(--r-full);padding:.45rem .875rem;font-size:.8rem;color:var(--text);background:var(--bg);outline:none;transition:border-color var(--ease)}
+.f-input:focus{border-color:var(--text)}
+.f-search{min-width:200px;flex:1}.f-select{cursor:pointer}
+.filters-right{margin-inline-start:auto;display:flex;align-items:center;gap:.5rem}
+.count-badge{font-size:.75rem;color:var(--text2)}
+.clear-btn{font-size:.75rem;color:var(--text2);transition:color var(--ease)}.clear-btn:hover{color:var(--text)}
+.store-body{max-width:1400px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
+.empty-state{text-align:center;padding:5rem 2rem}
+.empty-state .icon{font-size:2.5rem;margin-bottom:1rem;opacity:.3}
+.empty-state h3{font-size:1rem;font-weight:700;margin-bottom:.375rem}
+.empty-state p{color:var(--text2);font-size:.875rem}
+
+/* PRODUCT DETAIL */
+.pd-wrap{max-width:1400px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.pd-back{font-size:.8rem;color:var(--text2);margin-bottom:1.5rem;display:inline-flex;align-items:center;gap:.35rem;transition:color var(--ease);cursor:pointer}
+.pd-back:hover{color:var(--text)}
+.pd-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:3rem;align-items:start}
+@media(max-width:860px){.pd-grid{grid-template-columns:1fr}}
+.pd-viewer{position:sticky;top:calc(var(--nav-h) + 1.5rem)}
+.viewer-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;position:relative;aspect-ratio:1}
+#jersey-canvas{width:100%!important;height:100%!important;display:block;cursor:grab}
+#jersey-canvas:active{cursor:grabbing}
+.viewer-hint{position:absolute;bottom:.625rem;inset-inline:0;text-align:center;font-size:.7rem;color:var(--text3);pointer-events:none}
+.color-swatches{position:absolute;top:.75rem;left:.75rem;display:flex;gap:.35rem;flex-wrap:wrap;max-width:120px}
+.swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .15s,border-color .15s}
+.swatch:hover{transform:scale(1.2);border-color:var(--text)}
+.glb-note{margin-top:.625rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.5rem .75rem;font-size:.75rem;color:var(--text2)}
+.thumbs{display:flex;gap:.5rem;margin-top:.75rem}
+.thumb{width:64px;height:64px;border-radius:var(--r);object-fit:cover;border:1px solid var(--border);cursor:pointer;transition:border-color var(--ease);background:var(--bg3)}
+.thumb.active,.thumb:hover{border-color:var(--text);border-width:2px}
+.pd-badges{display:flex;gap:.375rem;flex-wrap:wrap;margin-bottom:.75rem}
+.pd-badges span{font-size:.7rem;font-weight:600;padding:.25rem .625rem;border-radius:var(--r-full)}
+.badge-p-red{background:#fee2e2;color:var(--accent)}.badge-p-gray{background:var(--bg3);color:var(--text2)}
+#pd-name{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.25rem;line-height:1.15}
+#pd-team{font-size:.8rem;color:var(--text2);font-weight:500;margin-bottom:.2rem;display:flex;align-items:center;gap:.4rem}
+#pd-team-logo{width:24px;height:24px;object-fit:contain}
+#pd-league{font-size:.8rem;color:var(--accent);font-weight:600;margin-bottom:.875rem}
+#pd-price{font-size:2rem;font-weight:800;margin-bottom:.75rem;letter-spacing:-.02em}
+#pd-desc{font-size:.875rem;color:var(--text2);line-height:1.7;margin-bottom:1.25rem}
+.size-section{margin-bottom:1.25rem}
+.size-label{font-size:.8rem;font-weight:600;margin-bottom:.5rem;display:flex;justify-content:space-between}
+.size-label span{color:var(--text2);font-weight:400}
+.size-btns{display:flex;gap:.375rem;flex-wrap:wrap}
+.sz{border:1px solid var(--border);border-radius:var(--r-full);padding:.45rem .875rem;font-size:.8rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all var(--ease)}
+.sz:hover{border-color:var(--text);color:var(--text)}.sz.active{background:var(--text);color:#fff;border-color:var(--text)}
+.custom-section{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.125rem;margin-bottom:1.25rem}
+.custom-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem}
+.custom-head h4{font-size:.825rem;font-weight:700}
+.custom-head span{font-size:.7rem;font-weight:600;color:#92400e;background:#fef3c7;padding:.2rem .55rem;border-radius:var(--r-full)}
+.custom-inputs{display:grid;grid-template-columns:1fr 1fr;gap:.625rem}
+.custom-inputs label{font-size:.7rem;color:var(--text2);display:block;margin-bottom:.25rem}
+.custom-inputs input{width:100%;border:1px solid var(--border);border-radius:var(--r);padding:.55rem .75rem;font-size:.875rem;text-align:center;font-weight:700;text-transform:uppercase;outline:none;background:var(--bg);transition:border-color var(--ease)}
+.custom-inputs input:focus{border-color:var(--text)}
+.pd-actions{display:flex;flex-direction:column;gap:.5rem}
+.pd-actions .btn-black,.pd-actions .btn-outline{padding:.9rem;font-size:.9rem;font-weight:700;text-align:center;width:100%}
+.pd-trust{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+.pd-trust span{font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:.3rem}
+
+/* CHECKOUT */
+.co-wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.co-wrap h1{font-size:1.4rem;font-weight:800;margin-bottom:1.75rem;letter-spacing:-.02em}
+.co-block{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1rem}
+.co-block h2{font-size:.875rem;font-weight:700;margin-bottom:1rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+.form-field{display:flex;flex-direction:column;gap:.25rem}.form-field.full{grid-column:1/-1}
+.form-field label{font-size:.75rem;font-weight:600;color:var(--text2)}
+.form-field input,.form-field textarea{border:1px solid var(--border);border-radius:var(--r);padding:.625rem .875rem;font-size:.875rem;outline:none;transition:border-color var(--ease);background:var(--bg);color:var(--text);text-align:right}
+.form-field input:focus,.form-field textarea:focus{border-color:var(--text)}
+.co-items{margin-bottom:.75rem}
+.co-item{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.co-item:last-child{border:none}
+.co-total-row{display:flex;justify-content:space-between;align-items:center;padding-top:.875rem;border-top:1px solid var(--border)}
+.co-total-row span:first-child{font-size:.8rem;color:var(--text2)}.co-total-row span:last-child{font-size:1.3rem;font-weight:800}
+.pay-methods{display:flex;gap:.375rem;margin-bottom:1rem}
+.pay-btn{flex:1;border:1px solid var(--border);border-radius:var(--r-full);padding:.625rem;font-size:.8rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all var(--ease);display:flex;align-items:center;justify-content:center;gap:.375rem}
+.pay-btn.active{border-color:var(--text);background:var(--text);color:#fff}
+.pay-btn:not(.active):hover{border-color:var(--border2);color:var(--text)}
+.bank-details{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.875rem 1rem;margin-bottom:.875rem}
+.bank-row{display:flex;justify-content:space-between;font-size:.8rem;padding:.25rem 0}
+.bank-row span:first-child{color:var(--text2)}.bank-row span:last-child{font-weight:700}
+.file-drop{border:1px dashed var(--border2);border-radius:var(--r);padding:1.25rem;text-align:center;cursor:pointer;transition:border-color var(--ease)}
+.file-drop:hover{border-color:var(--text)}
+.file-drop p{font-size:.8rem;color:var(--text2);margin-top:.375rem}
+.file-drop .icon{font-size:1.5rem;opacity:.35}
+.paypal-wrap{text-align:center;padding:.375rem 0 .625rem}
+.paypal-btn{background:#ffc439;color:#111;font-weight:800;padding:.875rem 2rem;border-radius:var(--r-full);font-size:.9rem;transition:background var(--ease)}
+.paypal-btn:hover{background:#f0b429}
+.paypal-note{font-size:.7rem;color:var(--text2);margin-top:.5rem}
+.submit-btn{width:100%;padding:1rem;font-size:.9rem;font-weight:700;border-radius:var(--r-full);margin-top:.25rem;background:var(--text);color:#fff;transition:opacity var(--ease)}
+.submit-btn:hover{opacity:.8}
+.order-success{display:none;text-align:center;padding:2.5rem 1.5rem;background:var(--bg);border:1px solid #a7f3d0;border-radius:var(--r-lg);margin-top:1.25rem}
+.order-success .s-icon{font-size:3rem;margin-bottom:.875rem}
+.order-success h2{font-size:1.2rem;font-weight:800;color:#059669;margin-bottom:.4rem}
+.order-success p{color:var(--text2);font-size:.875rem}
+.order-success .s-id{color:var(--text3);font-size:.75rem;font-family:monospace;margin:.625rem 0 1.25rem}
+
+/* ADMIN */
+.admin-wrap{max-width:1200px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.admin-wrap h1{font-size:1.4rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.02em}
+.admin-wrap .sub{color:var(--text2);font-size:.8rem;margin-bottom:1.75rem}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:1.5rem}
+@media(max-width:640px){.admin-stats{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--bg);padding:1.25rem}
+.stat-num{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.stat-lbl{font-size:.75rem;color:var(--text2);margin-top:.2rem}
+.tabs{display:flex;gap:.25rem;margin-bottom:1rem}
+.tab-btn{padding:.45rem 1rem;border-radius:var(--r-full);font-size:.8rem;font-weight:600;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all var(--ease)}
+.tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.tab-btn:not(.active):hover{border-color:var(--border2);color:var(--text)}
+.data-table{width:100%;border-collapse:collapse;font-size:.8rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.data-table th{padding:.75rem 1rem;font-weight:600;color:var(--text2);font-size:.75rem;border-bottom:1px solid var(--border);text-align:right;background:var(--bg2)}
+.data-table td{padding:.625rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.data-table tr:last-child td{border:none}.data-table tr:hover td{background:var(--bg2)}
+.tbl-actions{display:flex;gap:.5rem}
+.tbl-edit{font-size:.75rem;font-weight:600;color:#3b82f6}.tbl-edit:hover{text-decoration:underline}
+.tbl-del{font-size:.75rem;font-weight:600;color:var(--accent)}.tbl-del:hover{text-decoration:underline}
+.stock-low{color:var(--accent);font-weight:700}.stock-ok{color:#059669;font-weight:700}
+.status-badge{font-size:.7rem;font-weight:600;padding:.2rem .625rem;border-radius:var(--r-full)}
+.status-new{background:#dbeafe;color:#1d4ed8}.status-done{background:#d1fae5;color:#059669}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.12)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.125rem}
+.modal-head h2{font-size:1rem;font-weight:700}
+.modal-close-btn{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:.875rem;transition:var(--ease)}
+.modal-close-btn:hover{background:var(--bg3);color:var(--text)}
+.modal-fields{display:flex;flex-direction:column;gap:.75rem}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:.625rem}
+
+/* FOOTER */
+.site-footer{background:#0a0a0a;color:#fff;padding:2.5rem 1.5rem;border-top:1px solid #1a1a1a}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-logo{font-size:1rem;font-weight:800;margin-bottom:.375rem}
+.footer-logo em{font-style:normal;color:var(--accent)}
+.footer-tagline{color:#555;font-size:.8rem;margin-bottom:1.5rem}
+.footer-bottom{border-top:1px solid #1a1a1a;padding-top:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem}
+.footer-copy{font-size:.75rem;color:#555}
+.footer-socials{display:flex;gap:.75rem}
+.footer-socials a{width:32px;height:32px;border-radius:var(--r-full);border:1px solid #222;display:flex;align-items:center;justify-content:center;color:#555;font-size:.85rem;transition:var(--ease)}
+.footer-socials a:hover{border-color:#555;color:#fff}
+
+/* KIT TOGGLES */
+.kit-toggles{display:flex;gap:.375rem;margin-top:.625rem}
+.kit-btn{flex:1;border:1px solid var(--border);border-radius:var(--r-full);padding:.45rem .75rem;font-size:.775rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all var(--ease);background:var(--bg)}
+.kit-btn:hover{border-color:var(--border2);color:var(--text)}
+.kit-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+
+/* TOAST */
+#toast{display:none;position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;background:var(--text);color:#fff;padding:.7rem 1.125rem;border-radius:var(--r-full);font-size:.8rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);max-width:280px}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo" onclick="nav('home')">ג'רזי <em>קינג</em></span>
+    <div class="nav-links">
+      <a onclick="nav('home')">בית</a>
+      <a onclick="nav('store')">חנות</a>
+      <a onclick="nav('admin')">ניהול</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-cart" onclick="openCart()" aria-label="עגלת קניות">
+        <i class="fas fa-bag-shopping" style="font-size:.9rem"></i>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+      <button class="nav-shop-btn" onclick="nav('store')">קנה עכשיו</button>
+      <button class="nav-toggle" onclick="toggleMenu()" aria-label="תפריט">
+        <i class="fas fa-bars" style="font-size:.875rem"></i>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <a onclick="nav('home');toggleMenu()">בית</a>
+    <a onclick="nav('store');toggleMenu()">חנות</a>
+    <a onclick="nav('admin');toggleMenu()">ניהול</a>
+  </div>
+</nav>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<aside class="cart-drawer" id="cart-drawer">
+  <div class="cart-head">
+    <h2>עגלת קניות</h2>
+    <button class="cart-close" onclick="closeCart()"><i class="fas fa-xmark"></i></button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-foot-total"><span>סה"כ לתשלום</span><strong id="cart-total">₪0</strong></div>
+    <button class="cart-checkout" onclick="closeCart();nav('checkout')">המשך לתשלום ←</button>
+  </div>
+</aside>
+
+<!-- HOME -->
+<main id="page-home" class="page">
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <span class="hero-eyebrow">קולקציה חדשה · 2025</span>
+        <h1>גופיות<br>כדורגל<br><em>אגדיות</em></h1>
+        <p>מריאל מדריד 98' ועד ארגנטינה של מסי — מעל 500 גופיות קלאסיות ומודרניות עם הדפסה אישית.</p>
+        <div class="hero-actions">
+          <button class="btn-black" onclick="nav('store')">גלה את החנות ←</button>
+          <button class="btn-outline" onclick="setF('era','רטרו - שנות ה-90');nav('store')">גופיות רטרו</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-num">500+</div><div class="hero-stat-lbl">גופיות</div></div>
+          <div><div class="hero-stat-num">50+</div><div class="hero-stat-lbl">קבוצות</div></div>
+          <div><div class="hero-stat-num">10K+</div><div class="hero-stat-lbl">לקוחות</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=900&fit=crop&crop=top" alt="גופיות כדורגל">
+        <div class="hero-visual-badge">
+          <small>⭐ הכי נמכר השבוע</small>
+          <strong>ריאל מדריד 2024/25</strong>
+          <span>₪189</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:3rem;padding-bottom:2.5rem">
+    <div class="section-head"><h2>גלוש לפי ליגה</h2><a onclick="nav('store')">כל המוצרים ←</a></div>
+    <div class="cats-grid">
+      <div class="cat-card" onclick="setF('league','ליגת הפרמיירליג');nav('store')"><div class="cat-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="cat-name">פרמיירליג</div><div class="cat-sub">אנגליה</div></div>
+      <div class="cat-card" onclick="setF('league','לה ליגה');nav('store')"><div class="cat-flag">🇪🇸</div><div class="cat-name">לה ליגה</div><div class="cat-sub">ספרד</div></div>
+      <div class="cat-card" onclick="setF('league','סריה א');nav('store')"><div class="cat-flag">🇮🇹</div><div class="cat-name">סריה א</div><div class="cat-sub">איטליה</div></div>
+      <div class="cat-card" onclick="setF('league','ליגת העל');nav('store')"><div class="cat-flag">🇮🇱</div><div class="cat-name">ליגת העל</div><div class="cat-sub">ישראל</div></div>
+    </div>
+  </div>
+
+  <div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 0">
+    <div class="section" style="padding-top:0;padding-bottom:0">
+      <div class="section-head"><h2>הכי נמכרים</h2><a onclick="nav('store')">ראה הכל ←</a></div>
+      <div id="home-featured" class="prod-grid"></div>
+    </div>
+  </div>
+
+  <div class="retro-banner">
+    <div class="retro-banner-inner">
+      <div>
+        <div class="retro-tag">קולקציית רטרו</div>
+        <h2>גופיות שכתבו היסטוריה</h2>
+        <p>ריאל מדריד 98', ברצלונה 06', מנצ'סטר יונייטד 99'... כי כמה גביעים שלא תנצח — תמיד תחזור לקלאסיקה.</p>
+        <button class="btn-gold" onclick="setF('era','רטרו - שנות ה-90');nav('store')">גלה גופיות רטרו ←</button>
+      </div>
+      <div class="retro-trophy">🏆</div>
+    </div>
+  </div>
+
+  <div class="why-section">
+    <div class="why-inner">
+      <div class="section-head" style="margin-bottom:1.5rem"><h2>למה ג'רזי קינג?</h2></div>
+      <div class="why-grid">
+        <div class="why-card"><div class="why-icon"><i class="fas fa-truck"></i></div><h3>משלוח מהיר לכל הארץ</h3><p>3–5 ימי עסקים. משלוח חינם בהזמנה מעל ₪299.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-paintbrush"></i></div><h3>הדפסת שם ומספר</h3><p>כל גופייה אפשר להדפיס עם שם ומספר אישיים.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-rotate-left"></i></div><h3>החזרה קלה תוך 30 יום</h3><p>לא מרוצה? נחזיר לך את הכסף ללא שאלות.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">ג'רזי <em>קינג</em></div>
+      <div class="footer-tagline">חנות גופיות הכדורגל המובילה בישראל</div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 ג'רזי קינג. כל הזכויות שמורות.</span>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<!-- STORE -->
+<main id="page-store" class="page">
+  <div class="store-header">
+    <div class="store-header-inner"><h1>החנות</h1><p>מעל 500 גופיות קלאסיות ומודרניות</p></div>
+  </div>
+  <div class="filters-bar">
+    <div class="filters-inner">
+      <input id="f-search" class="f-input f-search" type="text" placeholder="חפש קבוצה, שחקן..." oninput="renderStore()">
+      <select id="f-league" class="f-input f-select" onchange="renderStore()">
+        <option value="">כל הליגות</option>
+        <option value="ליגת הפרמיירליג">פרמיירליג</option>
+        <option value="לה ליגה">לה ליגה</option>
+        <option value="סריה א">סריה א</option>
+        <option value="בונדסליגה">בונדסליגה</option>
+        <option value="ליגת האלופות">ליגת האלופות</option>
+        <option value="ליגת העל">ליגת העל</option>
+        <option value="נבחרות">נבחרות</option>
+      </select>
+      <select id="f-team" class="f-input f-select" onchange="renderStore()">
+        <option value="">כל הקבוצות</option>
+        <option>ריאל מדריד</option><option>ברצלונה</option><option>מנצ'סטר יונייטד</option>
+        <option>ליברפול</option><option>מנצ'סטר סיטי</option><option>יובנטוס</option>
+        <option>בייארן מינכן</option><option>מכבי תל אביב</option>
+        <option>הפועל תל אביב</option><option>ברזיל</option><option>ארגנטינה</option>
+      </select>
+      <select id="f-era" class="f-input f-select" onchange="renderStore()">
+        <option value="">כל התקופות</option>
+        <option value="2024/25 עונה נוכחית">2024/25 עכשווי</option>
+        <option value="שנות ה-2000">שנות ה-2000</option>
+        <option value="רטרו - שנות ה-90">רטרו שנות ה-90</option>
+        <option value="רטרו - שנות ה-80">רטרו שנות ה-80</option>
+        <option value="רטרו - שנות ה-70">רטרו שנות ה-70</option>
+      </select>
+      <div class="filters-right">
+        <span class="count-badge" id="store-count"></span>
+        <button class="clear-btn" onclick="clearFilters()">נקה</button>
+      </div>
+    </div>
+  </div>
+  <div class="store-body">
+    <div id="store-grid" class="prod-grid"></div>
+    <div id="store-empty" class="empty-state" style="display:none">
+      <div class="icon">🔍</div><h3>לא נמצאו גופיות</h3><p>נסה לשנות את הסינונים</p>
+    </div>
+  </div>
+</main>
+
+<!-- PRODUCT DETAIL -->
+<main id="page-product" class="page" style="padding-top:var(--nav-h);background:var(--bg)">
+  <div class="pd-wrap">
+    <button class="pd-back" onclick="nav('store')"><i class="fas fa-arrow-right"></i> חזרה לחנות</button>
+    <div class="pd-grid">
+      <div class="pd-viewer">
+        <div class="viewer-wrap">
+          <canvas id="jersey-canvas"></canvas>
+          <div class="color-swatches">
+            <button class="swatch" style="background:#fff;border:2px solid #ddd" onclick="jColor('#ffffff')" title="לבן"></button>
+            <button class="swatch" style="background:#c8102e" onclick="jColor('#c8102e')" title="אדום"></button>
+            <button class="swatch" style="background:#1a3a8f" onclick="jColor('#1a3a8f')" title="כחול"></button>
+            <button class="swatch" style="background:#0a1222" onclick="jColor('#0a1222')" title="נייבי"></button>
+            <button class="swatch" style="background:#1a7a1a" onclick="jColor('#1a7a1a')" title="ירוק"></button>
+            <button class="swatch" style="background:#111" onclick="jColor('#111111')" title="שחור"></button>
+            <button class="swatch" style="background:#f59e0b" onclick="jColor('#f59e0b')" title="צהוב"></button>
+            <button class="swatch" style="background:#6b21a8" onclick="jColor('#6b21a8')" title="סגול"></button>
+          </div>
+          <div class="viewer-hint">גרור לסיבוב · גלגל לזום</div>
+        </div>
+        <div class="kit-toggles">
+          <button class="kit-btn active" id="kit-home" onclick="switchKit('home')">בית 🏠</button>
+          <button class="kit-btn" id="kit-away" onclick="switchKit('away')">חוץ ✈️</button>
+        </div>
+        <div class="thumbs">
+          <img class="thumb active" id="th0" src="" onclick="pickThumb(0)" alt="">
+          <img class="thumb" id="th1" src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=150&h=150&fit=crop" onclick="pickThumb(1)" alt="">
+          <img class="thumb" id="th2" src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=150&h=150&fit=crop" onclick="pickThumb(2)" alt="">
+        </div>
+      </div>
+      <div>
+        <div class="pd-badges"><span class="badge-p-red" id="pd-badge"></span><span class="badge-p-gray" id="pd-era-badge"></span></div>
+        <h1 id="pd-name"></h1>
+        <p id="pd-team"><img id="pd-team-logo" src="" alt="" onerror="this.style.display='none'" style="display:none"></p>
+        <p id="pd-league"></p><p id="pd-price"></p><p id="pd-desc"></p>
+        <div class="size-section">
+          <div class="size-label"><span>בחר מידה</span><span id="sz-chosen">L נבחרה</span></div>
+          <div class="size-btns">
+            <button class="sz" onclick="pickSz(this,'S')">S</button>
+            <button class="sz" onclick="pickSz(this,'M')">M</button>
+            <button class="sz active" onclick="pickSz(this,'L')">L</button>
+            <button class="sz" onclick="pickSz(this,'XL')">XL</button>
+            <button class="sz" onclick="pickSz(this,'XXL')">XXL</button>
+          </div>
+        </div>
+        <div class="custom-section">
+          <div class="custom-head"><h4>הדפסה אישית על הגופייה</h4><span>+ ₪35</span></div>
+          <div class="custom-inputs">
+            <div><label>מספר (1–99)</label><input id="c-num" type="number" min="1" max="99" placeholder="10" oninput="jText()"></div>
+            <div><label>שם (באנגלית)</label><input id="c-name" type="text" placeholder="MESSI" maxlength="14" oninput="jText()"></div>
+          </div>
+        </div>
+        <div class="pd-actions">
+          <button class="btn-black" onclick="addFromDetail()">הוסף לעגלה</button>
+          <button class="btn-outline" onclick="addFromDetail();nav('checkout')">קנה עכשיו</button>
+        </div>
+        <div class="pd-trust">
+          <span><i class="fas fa-check-circle" style="color:var(--accent)"></i> משלוח מהיר</span>
+          <span><i class="fas fa-rotate-left" style="color:var(--accent)"></i> החזרה 30 יום</span>
+          <span><i class="fas fa-lock" style="color:var(--accent)"></i> תשלום מאובטח</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- CHECKOUT -->
+<main id="page-checkout" class="page" style="padding-top:var(--nav-h);background:var(--bg2)">
+  <div class="co-wrap">
+    <h1>תשלום ומשלוח</h1>
+    <div class="co-block">
+      <h2>סיכום הזמנה</h2>
+      <div class="co-items" id="co-items"></div>
+      <div class="co-total-row"><span>סה"כ לתשלום</span><span id="co-total">₪0</span></div>
+    </div>
+    <div class="co-block">
+      <h2>פרטי משלוח</h2>
+      <div class="form-grid">
+        <div class="form-field"><label>שם מלא *</label><input id="s-name" type="text" placeholder="ישראל ישראלי"></div>
+        <div class="form-field"><label>טלפון *</label><input id="s-phone" type="tel" placeholder="050-0000000"></div>
+        <div class="form-field full"><label>כתובת *</label><input id="s-addr" type="text" placeholder="רחוב הרצל 1"></div>
+        <div class="form-field"><label>עיר *</label><input id="s-city" type="text" placeholder="תל אביב"></div>
+        <div class="form-field"><label>מיקוד</label><input id="s-zip" type="text" placeholder="6100000"></div>
+      </div>
+    </div>
+    <div class="co-block">
+      <h2>אמצעי תשלום</h2>
+      <div class="pay-methods">
+        <button class="pay-btn active" id="pb-paypal" onclick="setPay('paypal')"><i class="fab fa-paypal"></i> PayPal</button>
+        <button class="pay-btn" id="pb-bank" onclick="setPay('bank')"><i class="fas fa-building-columns"></i> העברה בנקאית</button>
+      </div>
+      <div id="pm-paypal">
+        <div class="paypal-wrap">
+          <button class="paypal-btn" onclick="fakePaypal()">שלם עם PayPal</button>
+          <p class="paypal-note">מאובטח על ידי PayPal · SSL 256-bit</p>
+        </div>
+      </div>
+      <div id="pm-bank" style="display:none">
+        <div class="bank-details">
+          <div class="bank-row"><span>בנק:</span><span>בנק לאומי (10)</span></div>
+          <div class="bank-row"><span>סניף:</span><span>900</span></div>
+          <div class="bank-row"><span>חשבון:</span><span>123-456789</span></div>
+          <div class="bank-row"><span>על שם:</span><span>ג'רזי קינג בע"מ</span></div>
+        </div>
+        <label class="file-drop" for="receipt-file">
+          <input id="receipt-file" type="file" accept="image/*,.pdf" style="display:none" onchange="receiptPicked(this)">
+          <div id="receipt-label">
+            <div class="icon">📄</div>
+            <p>לחץ להעלאת אישור העברה</p>
+            <p style="font-size:.7rem;color:var(--text3);margin-top:.2rem">JPG · PNG · PDF עד 5MB</p>
+          </div>
+        </label>
+      </div>
+    </div>
+    <div class="co-block">
+      <h2>הערות להזמנה</h2>
+      <div class="form-field">
+        <textarea id="o-notes" rows="3" placeholder="הערות מיוחדות..." style="border:1px solid var(--border);border-radius:var(--r);padding:.625rem .875rem;font-size:.875rem;width:100%;resize:none;outline:none;transition:border-color var(--ease);background:var(--bg);color:var(--text);text-align:right"></textarea>
+      </div>
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="submitOrder()">אשר הזמנה ושלח ←</button>
+    <div class="order-success" id="order-success">
+      <div class="s-icon">🎉</div>
+      <h2>ההזמנה נשלחה בהצלחה!</h2>
+      <p>תודה! ניצור איתך קשר בקרוב לאישור ולתיאום משלוח.</p>
+      <p class="s-id" id="order-num"></p>
+      <button class="btn-black" onclick="nav('home')" style="margin-top:.5rem">חזרה לבית</button>
+    </div>
+  </div>
+</main>
+
+<!-- ADMIN -->
+<main id="page-admin" class="page" style="padding-top:var(--nav-h);background:var(--bg2)">
+  <div class="admin-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem">
+      <div><h1>לוח ניהול</h1><p class="sub">נהל מוצרים והזמנות</p></div>
+      <button class="btn-black" onclick="openModal()" style="font-size:.8rem;padding:.5rem 1rem">+ הוסף מוצר</button>
+    </div>
+    <div class="admin-stats">
+      <div class="stat-card"><div class="stat-num" id="a-prods">0</div><div class="stat-lbl">מוצרים</div></div>
+      <div class="stat-card"><div class="stat-num" id="a-orders">—</div><div class="stat-lbl">הזמנות</div></div>
+      <div class="stat-card"><div class="stat-num" id="a-rev">—</div><div class="stat-lbl">הכנסות</div></div>
+      <div class="stat-card"><div class="stat-num">4.9 ⭐</div><div class="stat-lbl">דירוג</div></div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-p" onclick="aTab('products')">מוצרים</button>
+      <button class="tab-btn" id="tab-o" onclick="aTab('orders')">הזמנות</button>
+    </div>
+    <div id="panel-products">
+      <table class="data-table">
+        <thead><tr><th>פעולות</th><th>מלאי</th><th>מחיר</th><th>עונה</th><th>קבוצה</th><th>שם מוצר</th></tr></thead>
+        <tbody id="prod-tbody"></tbody>
+      </table>
+    </div>
+    <div id="panel-orders" style="display:none">
+      <table class="data-table">
+        <thead><tr><th>סטטוס</th><th>סכום</th><th>תשלום</th><th>עיר</th><th>שם לקוח</th><th>תאריך</th><th>מספר הזמנה</th></tr></thead>
+        <tbody id="orders-tbody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text2)">טוען הזמנות...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-bg" id="prod-modal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modal-title">הוסף מוצר</h2>
+        <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-fields">
+        <div class="form-field"><label>שם הגופייה *</label><input id="m-name" type="text" placeholder="ריאל מדריד - בית 2024/25"></div>
+        <div class="modal-row">
+          <div class="form-field"><label>קבוצה *</label><input id="m-team" type="text" placeholder="ריאל מדריד"></div>
+          <div class="form-field"><label>ליגה</label><input id="m-league" type="text" placeholder="לה ליגה"></div>
+        </div>
+        <div class="modal-row">
+          <div class="form-field"><label>מחיר ₪ *</label><input id="m-price" type="number" placeholder="189"></div>
+          <div class="form-field"><label>מלאי</label><input id="m-stock" type="number" placeholder="50" value="50"></div>
+        </div>
+        <div class="form-field">
+          <label>עונה / תקופה</label>
+          <select id="m-era" class="f-input" style="border-radius:var(--r);padding:.55rem .875rem">
+            <option value="2024/25 עונה נוכחית">2024/25 עכשווי</option>
+            <option value="שנות ה-2000">שנות ה-2000</option>
+            <option value="רטרו - שנות ה-90">רטרו שנות ה-90</option>
+            <option value="רטרו - שנות ה-80">רטרו שנות ה-80</option>
+            <option value="רטרו - שנות ה-70">רטרו שנות ה-70</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>תג מוצר</label>
+          <select id="m-badge" class="f-input" style="border-radius:var(--r);padding:.55rem .875rem">
+            <option value="">ללא</option>
+            <option value="הכי נמכר">הכי נמכר</option>
+            <option value="חדש">חדש</option>
+            <option value="רטרו">רטרו</option>
+            <option value="מבצע">מבצע</option>
+          </select>
+        </div>
+        <div class="form-field"><label>כתובת תמונה (URL)</label><input id="m-img" type="text" placeholder="https://..."></div>
+        <div class="form-field"><label>תיאור</label><textarea id="m-desc" rows="3" style="border:1px solid var(--border);border-radius:var(--r);padding:.625rem .75rem;font-size:.875rem;width:100%;resize:none;outline:none;font-family:inherit;text-align:right;background:var(--bg);color:var(--text)"></textarea></div>
+        <button class="btn-black" onclick="saveProd()" style="width:100%;padding:.875rem;font-size:.875rem;font-weight:700">שמור מוצר</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+
+<!-- THREE.JS — BoxGeometry Depth Card (r160) -->
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+let scene, camera, renderer, controls, card, resizeObs, rafId;
+let pendingApply = null;
+
+/* ── canvas fallback texture ── */
+function makeCanvasTex(hexColor, label) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = 672;
+  const ctx = c.getContext('2d');
+  const base = hexColor || '#1a1a1a';
+  ctx.fillStyle = base; ctx.fillRect(0, 0, 512, 672);
+  /* subtle horizontal stripes */
+  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  for (let y = 0; y < 672; y += 44) ctx.fillRect(0, y, 512, 20);
+  if (label) {
+    ctx.fillStyle = 'rgba(255,255,255,0.18)';
+    ctx.font = 'bold 44px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(label, 256, 336);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/* ── texture loader with CORS + error fallback ── */
+function loadTex(url, fallbackColor, fallbackLabel, cb) {
+  if (!url) { cb(makeCanvasTex(fallbackColor, fallbackLabel)); return; }
+  const loader = new THREE.TextureLoader();
+  loader.crossOrigin = 'anonymous';
+  loader.load(url,
+    tex => { tex.colorSpace = THREE.SRGBColorSpace; cb(tex); },
+    undefined,
+    () => cb(makeCanvasTex(fallbackColor, fallbackLabel))
+  );
+}
+
+/* ── dispose current card ── */
+function disposeCard() {
+  if (!card) return;
+  card.geometry.dispose();
+  (Array.isArray(card.material) ? card.material : [card.material]).forEach(m => {
+    if (m.map) m.map.dispose();
+    m.dispose();
+  });
+  scene.remove(card);
+  card = null;
+}
+
+/* ── build Depth Card ── */
+/* Three.js BoxGeometry face order: [+X, -X, +Y, -Y, +Z(front), -Z(back)] */
+function buildCard(fTex, bTex, edgeColor) {
+  disposeCard();
+  const edgeHex = parseInt((edgeColor || '#222222').replace('#', ''), 16);
+  const edgeMat = new THREE.MeshStandardMaterial({ color: edgeHex, roughness: 0.88, metalness: 0.06 });
+  const frontMat = new THREE.MeshStandardMaterial({ map: fTex, roughness: 0.3, metalness: 0.0 });
+  const backMat  = new THREE.MeshStandardMaterial({ map: bTex,  roughness: 0.3, metalness: 0.0 });
+  const geo = new THREE.BoxGeometry(1.28, 1.68, 0.09);
+  card = new THREE.Mesh(geo, [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, backMat]);
+  card.castShadow = true;
+  scene.add(card);
+}
+
+/* ── scene init (called once on first product open) ── */
+function init() {
+  const canvas = document.getElementById('jersey-canvas');
+  if (!canvas || scene) return;
+  const wrap = canvas.parentElement;
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f4f4);
+
+  camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(0, 0.05, 3.2);
+
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+
+  function resize() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  resize();
+  resizeObs = new ResizeObserver(resize);
+  resizeObs.observe(wrap);
+
+  /* lighting */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const key = new THREE.DirectionalLight(0xffffff, 1.4);
+  key.position.set(2, 4, 4); key.castShadow = true; scene.add(key);
+  const fill = new THREE.DirectionalLight(0xb0c8ff, 0.4);
+  fill.position.set(-3, 1, -2); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xfff0dd, 0.25);
+  rim.position.set(0, -3, -3); scene.add(rim);
+
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; controls.dampingFactor = 0.07;
+  controls.enablePan = false;
+  controls.minDistance = 1.8; controls.maxDistance = 5.0;
+  controls.minPolarAngle = Math.PI * 0.2; controls.maxPolarAngle = Math.PI * 0.8;
+  controls.autoRotate = true; controls.autoRotateSpeed = 1.2;
+  canvas.addEventListener('pointerdown', () => controls.autoRotate = false, { passive: true });
+
+  function tick() { rafId = requestAnimationFrame(tick); controls.update(); renderer.render(scene, camera); }
+  tick();
+
+  /* apply any pending team that arrived before init */
+  if (pendingApply) { _doApply(pendingApply); pendingApply = null; }
+}
+
+/* ── full dispose (called when leaving product page) ── */
+window._3dDispose = () => {
+  if (rafId) cancelAnimationFrame(rafId);
+  disposeCard();
+  if (controls) { controls.dispose(); controls = null; }
+  if (renderer) { renderer.dispose(); renderer = null; }
+  if (resizeObs) { resizeObs.disconnect(); resizeObs = null; }
+  scene = null; camera = null;
+  window._3dready = false;
+};
+
+function _doApply({ color, imageUrls }) {
+  const urls = imageUrls || {};
+  loadTex(urls.front || null, color, '▶ FRONT', fTex => {
+    loadTex(urls.back || null, color, '◀ BACK', bTex => {
+      buildCard(fTex, bTex, color);
+    });
+  });
+}
+
+window.applyTeam = (color, logoUrl, imageUrls) => {
+  if (!scene) { pendingApply = { color, imageUrls }; return; }
+  _doApply({ color, imageUrls });
+};
+
+/* jColor — live edge color update on the Depth Card (faces 0-3 are edges) */
+window.jColor = (hex) => {
+  if (!card) return;
+  const c = parseInt(hex.replace('#', ''), 16);
+  card.material.slice(0, 4).forEach(m => { m.color.setHex(c); m.needsUpdate = true; });
+};
+window.jText = () => {};
+
+/* setFace — swap a single face texture in-place (4=front, 5=back) */
+window.setFace = (faceIndex, url, fallbackColor) => {
+  if (!card) return;
+  const mat = card.material[faceIndex];
+  const label = faceIndex === 4 ? '▶ FRONT' : '◀ BACK';
+  loadTex(url, fallbackColor, label, tex => {
+    if (mat.map) mat.map.dispose();
+    mat.map = tex; mat.needsUpdate = true;
+  });
+};
+
+window._3dinit  = init;
+window._3dready = false;
+</script>
+
+<!-- APP -->
+<script>
+const SB_URL='https://kinpgookcehtdbgdodht.supabase.co';
+const SB_KEY='sb_publishable_xhW0Br8GYpiXHvQJ_pYgOg_7nkH03-A';
+let sb=null;try{sb=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
+
+let PRODS=[
+  {id:1,name:'ריאל מדריד — בית 2024/25',team:'ריאל מדריד',league:'לה ליגה',era:'2024/25 עונה נוכחית',price:189,badge:'הכי נמכר',stock:30,color:'#EFEFEF',logo:'https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg',
+   img:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',awayBack:null},
+   desc:'גופיית הבית הרשמית לעונת 2024/25. בד AdZero קל ונושם, לוגו רקום.'},
+  {id:2,name:'ברצלונה — בית',team:'ברצלונה',league:'לה ליגה',era:'2024/25 עונה נוכחית',price:179,badge:'חדש',stock:22,color:'#004D98',logo:'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg',
+   img:'https://images.unsplash.com/photo-1620456963556-f827c68a0f82?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1620456963556-f827c68a0f82?w=600&h=700&fit=crop',back:null,awayFront:'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&h=700&fit=crop',awayBack:null},
+   desc:'הפסים האדום-כחולים האגדיים בעיצוב מודרני לעונת 2024/25.'},
+  {id:3,name:"מנצ'סטר יונייטד — 1998/99",team:"מנצ'סטר יונייטד",league:'ליגת הפרמיירליג',era:'רטרו - שנות ה-90',price:229,badge:'רטרו',stock:14,color:'#DA291C',logo:'https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg',
+   img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',awayBack:null},
+   desc:'גופיית הטרבל האגדית — ליגה, גביע, ליגת האלופות.'},
+  {id:4,name:'ליברפול — בית 2024/25',team:'ליברפול',league:'ליגת הפרמיירליג',era:'2024/25 עונה נוכחית',price:175,badge:'',stock:40,color:'#C8102E',logo:'https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg',
+   img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500&h=500&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',back:null,awayFront:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayBack:null},
+   desc:'האדום הקלאסי של ה-Kop חוזר. גופיית הבית של ליברפול לעונת 2024/25.'},
+  {id:5,name:'מכבי תל אביב — בית',team:'מכבי תל אביב',league:'ליגת העל',era:'2024/25 עונה נוכחית',price:139,badge:'הכי נמכר',stock:55,color:'#FFE500',logo:'https://upload.wikimedia.org/wikipedia/commons/b/b8/Maccabi_Tel_Aviv_team_crest.svg',
+   img:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',awayBack:null},
+   desc:'גופיית הבית הצהוב-כחולה של אלופת ישראל.'},
+  {id:6,name:'ברזיל — 1970 רטרו',team:'ברזיל',league:'נבחרות',era:'רטרו - שנות ה-70',price:249,badge:'רטרו',stock:8,color:'#F7D02C',logo:'https://upload.wikimedia.org/wikipedia/commons/5/5d/CBF_logo.svg',
+   img:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=700&fit=crop&sat=-20&hue=30',
+   imageUrls:{front:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',awayBack:null},
+   desc:'פלה, זיקו, טוסטאו — גביע עולם מקסיקו 1970. ריפרודוקציה קלאסית.'},
+  {id:7,name:'ארגנטינה — אלוף העולם 2022',team:'ארגנטינה',league:'נבחרות',era:'שנות ה-2000',price:199,badge:'מבצע',stock:20,color:'#75AADB',logo:'https://upload.wikimedia.org/wikipedia/commons/a/a9/AFA_logo_%28crest%29.svg',
+   img:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',awayBack:null},
+   desc:'קטאר 2022, מסי, גביע. הזמינו עם מספר 10.'},
+  {id:8,name:'יובנטוס — 2002/03 רטרו',team:'יובנטוס',league:'סריה א',era:'שנות ה-2000',price:215,badge:'רטרו',stock:11,color:'#1C1C1C',logo:'https://upload.wikimedia.org/wikipedia/commons/b/bc/Juventus_FC_2017.svg',
+   img:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop&grayscale',
+   imageUrls:{front:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&h=700&fit=crop',awayBack:null},
+   desc:'הפסים השחור-לבנים מעידן הזהב של הביאנקונרי.'},
+  {id:9,name:"מנצ'סטר סיטי — בית 2024/25",team:"מנצ'סטר סיטי",league:'ליגת הפרמיירליג',era:'2024/25 עונה נוכחית',price:185,badge:'',stock:33,color:'#6CABDD',logo:'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg',
+   img:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&h=700&fit=crop',back:null,awayFront:null,awayBack:null},
+   desc:'גופיית הבית הכחולה של הסיטיזנס לעונת 2024/25.'},
+  {id:10,name:'הפועל תל אביב — בית',team:'הפועל תל אביב',league:'ליגת העל',era:'2024/25 עונה נוכחית',price:129,badge:'',stock:48,color:'#E3000B',logo:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Hapoel_Tel_Aviv_F.C._logo.svg/150px-Hapoel_Tel_Aviv_F.C._logo.svg.png',
+   img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&h=700&fit=crop',awayBack:null},
+   desc:'גופיית הפועל תל אביב — הקבוצה האדומה של העיר.'},
+  {id:11,name:'בייארן מינכן — בית 2024/25',team:'בייארן מינכן',league:'בונדסליגה',era:'2024/25 עונה נוכחית',price:180,badge:'',stock:27,color:'#DC052D',logo:'https://upload.wikimedia.org/wikipedia/commons/1/1f/FC_Bayern_M%C3%BCnchen_AG_logo.svg',
+   img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&h=700&fit=crop',back:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=700&fit=crop',awayFront:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',awayBack:null},
+   desc:'האריות הבווריים חוזרים. גופיית הבית האדומה של בייארן מינכן.'},
+  {id:12,name:'אייאקס — 1994/95 רטרו',team:'אייאקס',league:'ליגת האלופות',era:'רטרו - שנות ה-90',price:239,badge:'רטרו',stock:6,color:'#D2122E',logo:'https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg',
+   img:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',
+   imageUrls:{front:'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600&h=700&fit=crop',back:null,awayFront:null,awayBack:null},
+   desc:'ליגת האלופות 1994/95 עם קלויברט וסידורף.'},
+];
+
+let cart=JSON.parse(localStorage.getItem('jk2_cart')||'[]');
+let curProd=null,selSz='L',selPay='paypal',editId=null;
+function saveCart(){localStorage.setItem('jk2_cart',JSON.stringify(cart));}
+function cartCount(){return cart.reduce((a,i)=>a+i.qty,0);}
+function cartTotal(){return cart.reduce((a,i)=>a+i.price*i.qty,0);}
+function addToCart(id,size='M',cName='',cNum=''){
+  const p=PRODS.find(x=>x.id===id);if(!p)return;
+  const key=`${id}|${size}|${cName}|${cNum}`;
+  const ex=cart.find(i=>i._k===key);
+  if(ex)ex.qty++;else cart.push({_k:key,id,name:p.name,price:p.price,img:p.img,size,cName,cNum,qty:1});
+  saveCart();refreshCart();toast(`"${p.name}" נוסף לעגלה`);
+}
+window.addToCart=addToCart;
+function removeFromCart(k){cart=cart.filter(i=>i._k!==k);saveCart();refreshCart();}
+window.removeFromCart=removeFromCart;
+function refreshCart(){
+  const cnt=cartCount();
+  const badge=document.getElementById('cart-count');
+  if(badge){badge.textContent=cnt;badge.classList.toggle('show',cnt>0);}
+  const total=document.getElementById('cart-total');if(total)total.textContent='₪'+cartTotal();
+  const body=document.getElementById('cart-items');if(!body)return;
+  if(!cart.length){body.innerHTML='<div class="cart-empty"><i class="fas fa-bag-shopping" style="font-size:2rem;opacity:.2"></i><span>העגלה ריקה</span></div>';return;}
+  body.innerHTML=cart.map(i=>`<div class="cart-item"><img src="${i.img}" alt="${i.name}" loading="lazy"><div class="cart-item-info"><h4>${i.name}</h4><p>מידה ${i.size}${i.cName?' · '+i.cName+' '+i.cNum:''}</p><div class="cart-item-price">₪${i.price} × ${i.qty}</div></div><button class="cart-item-remove" onclick="removeFromCart('${i._k}')" aria-label="הסר"><i class="fas fa-xmark"></i></button></div>`).join('');
+}
+function openCart(){document.getElementById('cart-overlay').classList.add('open');document.getElementById('cart-drawer').classList.add('open');refreshCart();}
+function closeCart(){document.getElementById('cart-overlay').classList.remove('open');document.getElementById('cart-drawer').classList.remove('open');}
+window.openCart=openCart;window.closeCart=closeCart;
+function nav(p){
+  const prev=document.querySelector('.page.active');
+  if(prev&&prev.id==='page-product'&&p!=='product'){window._3dDispose?.();}
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p)?.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(p==='home')renderFeatured();
+  if(p==='store')renderStore();
+  if(p==='checkout')renderCheckout();
+  if(p==='admin'){renderAdminProds();loadOrders();}
+  if(p==='product'){setTimeout(()=>{window._3dinit?.();window._3dready=true;},80);}
+}
+window.nav=nav;
+function setF(k,v){const m={league:'f-league',team:'f-team',era:'f-era'};const el=document.getElementById(m[k]);if(el)el.value=v;}
+window.setF=setF;
+function toggleMenu(){document.getElementById('mobile-nav').classList.toggle('open');}
+window.toggleMenu=toggleMenu;
+function badgeClass(b){return b==='הכי נמכר'?'badge-hot':b==='רטרו'?'badge-retro':b==='חדש'?'badge-new':b==='מבצע'?'badge-sale':'';}
+function prodCard(p){
+  const badge=p.badge?`<span class="prod-badge ${badgeClass(p.badge)}">${p.badge}</span>`:'';
+  const logoImg=p.logo?`<img class="prod-team-logo" src="${p.logo}" alt="" onerror="this.style.display='none'" loading="lazy">`:'';
+  return `<div class="prod-card" onclick="openProd(${p.id})"><div class="prod-img-wrap"><img src="${p.img}" alt="${p.name}" loading="lazy">${badge}</div><div class="prod-info"><div class="prod-team">${logoImg}${p.team}</div><div class="prod-name">${p.name}</div><div class="prod-footer"><span class="prod-price">₪${p.price}</span><button class="prod-add-btn" onclick="event.stopPropagation();addToCart(${p.id},'M')" aria-label="הוסף לעגלה"><i class="fas fa-plus"></i></button></div></div></div>`;
+}
+function renderFeatured(){const el=document.getElementById('home-featured');if(el)el.innerHTML=PRODS.filter(p=>p.badge).slice(0,4).map(prodCard).join('');}
+function renderStore(){
+  const s=(document.getElementById('f-search')?.value||'').toLowerCase();
+  const lg=document.getElementById('f-league')?.value||'';
+  const tm=document.getElementById('f-team')?.value||'';
+  const er=document.getElementById('f-era')?.value||'';
+  const res=PRODS.filter(p=>(!s||(p.name+p.team).toLowerCase().includes(s))&&(!lg||p.league===lg)&&(!tm||p.team===tm)&&(!er||p.era===er));
+  document.getElementById('store-grid').innerHTML=res.map(prodCard).join('');
+  document.getElementById('store-empty').style.display=res.length?'none':'block';
+  document.getElementById('store-count').textContent=`${res.length} גופיות`;
+}
+window.renderStore=renderStore;
+function clearFilters(){['f-search','f-league','f-team','f-era'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderStore();}
+window.clearFilters=clearFilters;
+function openProd(id){
+  curProd=PRODS.find(p=>p.id===id);if(!curProd)return;
+  document.getElementById('pd-name').textContent=curProd.name;
+  const pdTeamEl=document.getElementById('pd-team');
+  const pdLogoEl=document.getElementById('pd-team-logo');
+  if(pdLogoEl&&curProd.logo){pdLogoEl.src=curProd.logo;pdLogoEl.alt=curProd.team;pdLogoEl.style.display='inline-block';}
+  else if(pdLogoEl){pdLogoEl.style.display='none';}
+  const tn=pdTeamEl.childNodes;if(tn.length>1)tn[1]?.remove?.();
+  pdTeamEl.appendChild(document.createTextNode(curProd.team));
+  document.getElementById('pd-league').textContent=curProd.league+' · '+curProd.era;
+  document.getElementById('pd-price').textContent='₪'+curProd.price;
+  document.getElementById('pd-desc').textContent=curProd.desc||'';
+  const b=document.getElementById('pd-badge');b.textContent=curProd.badge||'';b.style.display=curProd.badge?'':'none';
+  document.getElementById('pd-era-badge').textContent=curProd.era;
+  /* reset kit toggle */
+  curKit='home';
+  document.getElementById('kit-home')?.classList.add('active');
+  document.getElementById('kit-away')?.classList.remove('active');
+  /* populate thumbs from imageUrls */
+  const _u=curProd.imageUrls||{};
+  const _thumbs=[_u.front||curProd.img, _u.back||null, _u.awayFront||null];
+  _thumbs.forEach((url,i)=>{const t=document.getElementById('th'+i);if(t){t.src=url||'';t.style.opacity=url?'1':'0.25';t.style.display='';}});
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  document.getElementById('th0')?.classList.add('active');
+  selSz='L';document.querySelectorAll('.sz').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.sz:nth-child(3)')?.classList.add('active');
+  document.getElementById('sz-chosen').textContent='L נבחרה';
+  window.applyTeam?.(curProd.color||'#ffffff', curProd.logo||'', curProd.imageUrls||{});
+  nav('product');
+}
+window.openProd=openProd;
+function pickSz(btn,sz){document.querySelectorAll('.sz').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selSz=sz;document.getElementById('sz-chosen').textContent=sz+' נבחרה';}
+window.pickSz=pickSz;
+function addFromDetail(){if(!curProd)return;addToCart(curProd.id,selSz,document.getElementById('c-name')?.value||'',document.getElementById('c-num')?.value||'');}
+window.addFromDetail=addFromDetail;
+function pickThumb(i){
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  document.getElementById('th'+i)?.classList.add('active');
+  if(!curProd)return;
+  const urls=curProd.imageUrls||{};
+  const isHome=curKit==='home';
+  const faceUrls=[isHome?urls.front:urls.awayFront, isHome?urls.back:urls.awayBack, isHome?urls.awayFront:urls.front];
+  const url=faceUrls[i]||null;
+  const faceIndex=i===1?5:4; /* thumb1=back face, others=front face */
+  window.setFace?.(faceIndex, url, curProd.color||'#ffffff');
+}
+window.pickThumb=pickThumb;
+let curKit='home';
+function switchKit(mode){
+  curKit=mode;
+  document.getElementById('kit-home')?.classList.toggle('active',mode==='home');
+  document.getElementById('kit-away')?.classList.toggle('active',mode==='away');
+  if(!curProd)return;
+  const urls=curProd.imageUrls||{};
+  const front=mode==='home'?urls.front:urls.awayFront;
+  const back =mode==='home'?urls.back :urls.awayBack;
+  window.applyTeam?.(curProd.color||'#ffffff','',{front,back});
+  /* update thumb images to match kit */
+  const thumbSrcs=[front,back,mode==='home'?urls.awayFront:urls.front];
+  thumbSrcs.forEach((u,i)=>{const t=document.getElementById('th'+i);if(t){t.src=u||'';t.style.opacity=u?'1':'0.25';}});
+  document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
+  document.getElementById('th0')?.classList.add('active');
+}
+window.switchKit=switchKit;
+function renderCheckout(){
+  const items=document.getElementById('co-items');
+  if(items)items.innerHTML=cart.map(i=>`<div class="co-item"><span>${i.name}${i.cName?' ('+i.cName+' '+i.cNum+')':''} × ${i.qty} · ${i.size}</span><span style="font-weight:700">₪${i.price*i.qty}</span></div>`).join('');
+  const t=document.getElementById('co-total');if(t)t.textContent='₪'+cartTotal();
+  document.getElementById('order-success').style.display='none';
+  document.getElementById('submit-btn').style.display='block';
+}
+function setPay(m){
+  selPay=m;
+  document.getElementById('pm-paypal').style.display=m==='paypal'?'block':'none';
+  document.getElementById('pm-bank').style.display=m==='bank'?'block':'none';
+  document.getElementById('pb-paypal').className='pay-btn'+(m==='paypal'?' active':'');
+  document.getElementById('pb-bank').className='pay-btn'+(m==='bank'?' active':'');
+}
+window.setPay=setPay;
+function fakePaypal(){toast('מעבד תשלום PayPal...');setTimeout(()=>toast('תשלום PayPal בוצע (הדגמה)'),1600);}
+window.fakePaypal=fakePaypal;
+function receiptPicked(inp){if(inp.files[0])document.getElementById('receipt-label').innerHTML=`<div style="color:#059669;font-size:1.25rem">✓</div><p style="font-size:.8rem;font-weight:600;margin-top:.375rem">${inp.files[0].name}</p>`;}
+window.receiptPicked=receiptPicked;
+async function submitOrder(){
+  const name=document.getElementById('s-name')?.value?.trim();
+  const phone=document.getElementById('s-phone')?.value?.trim();
+  const addr=document.getElementById('s-addr')?.value?.trim();
+  const city=document.getElementById('s-city')?.value?.trim();
+  if(!name||!phone||!addr||!city){toast('אנא מלא את כל שדות החובה');return;}
+  if(!cart.length){toast('העגלה ריקה');return;}
+  const oid='JK-'+Date.now().toString().slice(-7);
+  const order={order_id:oid,customer_name:name,phone,address:addr+', '+city,city,total:cartTotal(),payment_method:selPay,items:cart,notes:document.getElementById('o-notes')?.value||'',status:'חדש',created_at:new Date().toISOString()};
+  if(sb){try{await sb.from('orders').insert([order]);}catch(e){console.warn('Supabase:',e);}}
+  document.getElementById('order-success').style.display='block';
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('order-num').textContent='מספר הזמנה: '+oid;
+  cart=[];saveCart();refreshCart();toast('ההזמנה נשלחה בהצלחה!');
+}
+window.submitOrder=submitOrder;
+function renderAdminProds(){
+  document.getElementById('a-prods').textContent=PRODS.length;
+  document.getElementById('prod-tbody').innerHTML=PRODS.map(p=>`<tr><td><div class="tbl-actions"><button class="tbl-edit" onclick="editProd(${p.id})">ערוך</button><button class="tbl-del" onclick="delProd(${p.id})">מחק</button></div></td><td class="${p.stock<10?'stock-low':'stock-ok'}">${p.stock}</td><td style="font-weight:700">₪${p.price}</td><td style="color:var(--text2);font-size:.75rem">${p.era}</td><td>${p.team}</td><td style="font-weight:600">${p.name}</td></tr>`).join('');
+}
+async function loadOrders(){
+  const tbody=document.getElementById('orders-tbody');
+  if(!sb){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text2)">חבר את Supabase לצפייה בהזמנות</td></tr>';return;}
+  try{
+    const{data,error}=await sb.from('orders').select('*').order('created_at',{ascending:false}).limit(100);
+    if(error||!data?.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text2)">אין הזמנות עדיין</td></tr>';return;}
+    const rev=data.reduce((a,o)=>a+(+o.total||0),0);
+    document.getElementById('a-orders').textContent=data.length;
+    document.getElementById('a-rev').textContent='₪'+rev.toLocaleString();
+    tbody.innerHTML=data.map(o=>`<tr><td><span class="status-badge ${o.status==='חדש'?'status-new':'status-done'}">${o.status||'חדש'}</span></td><td style="font-weight:700">₪${o.total}</td><td style="color:var(--text2)">${o.payment_method==='paypal'?'PayPal':'העברה'}</td><td>${o.city||''}</td><td style="font-weight:600">${o.customer_name}</td><td style="color:var(--text3);font-size:.75rem">${new Date(o.created_at).toLocaleDateString('he-IL')}</td><td style="color:var(--text3);font-size:.7rem;font-family:monospace">${o.order_id}</td></tr>`).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--accent);padding:2rem">שגיאה בטעינת הזמנות</td></tr>';}
+}
+function aTab(t){
+  document.getElementById('panel-products').style.display=t==='products'?'block':'none';
+  document.getElementById('panel-orders').style.display=t==='orders'?'block':'none';
+  ['products','orders'].forEach(k=>{const b=document.getElementById('tab-'+k[0]);if(b)b.className='tab-btn'+(k===t?' active':'');});
+  if(t==='orders')loadOrders();
+}
+window.aTab=aTab;
+function openModal(){editId=null;document.getElementById('modal-title').textContent='הוסף מוצר';['m-name','m-team','m-league','m-img','m-desc'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('m-price').value='';document.getElementById('m-stock').value=50;document.getElementById('prod-modal').classList.add('open');}
+window.openModal=openModal;
+function editProd(id){
+  const p=PRODS.find(x=>x.id===id);if(!p)return;editId=id;
+  document.getElementById('modal-title').textContent='ערוך מוצר';
+  document.getElementById('m-name').value=p.name;document.getElementById('m-team').value=p.team;
+  document.getElementById('m-league').value=p.league;document.getElementById('m-price').value=p.price;
+  document.getElementById('m-stock').value=p.stock;document.getElementById('m-era').value=p.era;
+  document.getElementById('m-badge').value=p.badge||'';document.getElementById('m-img').value=p.img||'';
+  document.getElementById('m-desc').value=p.desc||'';
+  document.getElementById('prod-modal').classList.add('open');
+}
+window.editProd=editProd;
+function closeModal(){document.getElementById('prod-modal').classList.remove('open');}
+window.closeModal=closeModal;
+function saveProd(){
+  const np={id:editId||Date.now(),name:document.getElementById('m-name').value.trim(),team:document.getElementById('m-team').value.trim(),league:document.getElementById('m-league').value.trim(),price:+document.getElementById('m-price').value||0,stock:+document.getElementById('m-stock').value||0,era:document.getElementById('m-era').value,badge:document.getElementById('m-badge').value,img:document.getElementById('m-img').value.trim()||'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&h=500&fit=crop',desc:document.getElementById('m-desc').value.trim()};
+  if(!np.name||!np.team||!np.price){toast('מלא שם, קבוצה ומחיר');return;}
+  if(editId){const i=PRODS.findIndex(p=>p.id===editId);if(i>-1)PRODS[i]=np;toast('המוצר עודכן');}
+  else{PRODS.push(np);toast('מוצר נוסף');}
+  closeModal();renderAdminProds();
+}
+window.saveProd=saveProd;
+function delProd(id){if(!confirm('למחוק מוצר זה?'))return;PRODS=PRODS.filter(p=>p.id!==id);renderAdminProds();toast('מוצר נמחק');}
+window.delProd=delProd;
+let _tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(_tt);_tt=setTimeout(()=>el.style.display='none',3000);}
+refreshCart();nav('home');
+</script>
+</body>
+</html>
