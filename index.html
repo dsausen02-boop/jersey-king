@@ -377,6 +377,41 @@ input,select,textarea{font-family:inherit}
   .prod-card .prod-name{font-size:.8rem}
   .prod-info{padding:.625rem .75rem .75rem}
 }
+
+/* ── MYSTERY BOX ── */
+.mystery-section{background:#0a0a0a;padding:4rem 1.5rem;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a}
+.mystery-section-inner{max-width:1400px;margin:0 auto}
+.mystery-section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2rem}
+.mystery-section-head h2{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;color:#fff}
+.mystery-section-head p{font-size:.8rem;color:#555;margin-top:.25rem}
+.mystery-eyebrow{font-size:.65rem;font-weight:700;color:#d97706;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.625rem}
+.mystery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:var(--r-lg);overflow:hidden}
+@media(max-width:900px){.mystery-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.mystery-grid{grid-template-columns:1fr}}
+.mystery-card{background:#111;padding:1.75rem;cursor:pointer;display:flex;flex-direction:column;gap:.875rem;transition:background .2s ease;position:relative;overflow:hidden}
+.mystery-card::before{content:'';position:absolute;inset:0;background:var(--mc-grad,linear-gradient(135deg,rgba(200,16,46,.08) 0%,transparent 60%));pointer-events:none}
+.mystery-card:hover{background:#161616}
+.mystery-card-top{display:flex;justify-content:space-between;align-items:flex-start}
+.mystery-icon{font-size:2rem;line-height:1}
+.mystery-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-full);background:var(--mc-badge-bg,rgba(200,16,46,.15));color:var(--mc-badge,#c8102e)}
+.mystery-qmark{font-size:3.5rem;font-weight:900;color:#1f1f1f;text-align:center;line-height:1;margin:.25rem 0;letter-spacing:-.04em;font-family:'Rubik',sans-serif}
+.mystery-name{font-size:1rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.mystery-hint{font-size:.75rem;color:#555;line-height:1.5}
+.mystery-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:.875rem;border-top:1px solid #1f1f1f}
+.mystery-price{font-size:1.1rem;font-weight:800;color:#fff}
+.mystery-price small{font-size:.7rem;font-weight:400;color:#555;margin-right:.25rem}
+.mystery-btn{background:var(--mc-btn,#c8102e);color:#fff;padding:.45rem 1rem;border-radius:var(--r-full);font-size:.775rem;font-weight:700;transition:opacity .2s ease;border:none;cursor:pointer}
+.mystery-btn:hover{opacity:.85}
+/* store page mystery strip */
+.mystery-strip{background:#0d0d0d;border-bottom:1px solid #1a1a1a;padding:1.25rem 0}
+.mystery-strip-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.mystery-strip-text{color:#aaa;font-size:.875rem}
+.mystery-strip-text strong{color:#fff;font-weight:700}
+.mystery-strip-cta{background:#fff;color:#0a0a0a;padding:.45rem 1.125rem;border-radius:var(--r-full);font-size:.8rem;font-weight:700;cursor:pointer;transition:opacity .2s ease;white-space:nowrap}
+.mystery-strip-cta:hover{opacity:.85}
+/* reveal animation */
+@keyframes mystery-pop{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.mystery-reveal{animation:mystery-pop .4s cubic-bezier(.34,1.56,.64,1) both}
 </style>
 </head>
 <body>
@@ -388,6 +423,7 @@ input,select,textarea{font-family:inherit}
     <div class="nav-links">
       <a onclick="nav('home')">בית</a>
       <a onclick="nav('store')">חנות</a>
+      <a onclick="nav('mystery')" style="color:var(--accent);font-weight:700">📦 קופסת מסתורין</a>
       <a onclick="nav('admin')">ניהול</a>
     </div>
     <div class="nav-right">
@@ -404,6 +440,7 @@ input,select,textarea{font-family:inherit}
   <div class="mobile-nav" id="mobile-nav">
     <a onclick="nav('home');toggleMenu()">בית</a>
     <a onclick="nav('store');toggleMenu()">חנות</a>
+    <a onclick="nav('mystery');toggleMenu()" style="color:var(--accent);font-weight:700">📦 קופסת מסתורין</a>
     <a onclick="nav('admin');toggleMenu()">ניהול</a>
   </div>
 </nav>
@@ -481,6 +518,21 @@ input,select,textarea{font-family:inherit}
     </div>
   </div>
 
+  <!-- MYSTERY BOX TEASER on home -->
+  <div class="mystery-section">
+    <div class="mystery-section-inner">
+      <div class="mystery-section-head">
+        <div>
+          <div class="mystery-eyebrow">חדש · קופסת מסתורין</div>
+          <h2>לא יודע מה לבחור?</h2>
+          <p style="color:#555;font-size:.875rem;margin-top:.375rem">הזמן קופסה — קבל גופייה אקראית מהקטגוריה שבחרת.</p>
+        </div>
+        <button class="mystery-strip-cta" onclick="nav('mystery')">כל הקופסאות ←</button>
+      </div>
+      <div class="mystery-grid" id="home-mystery-grid"></div>
+    </div>
+  </div>
+
   <div class="why-section">
     <div class="why-inner">
       <div class="section-head" style="margin-bottom:1.5rem"><h2>למה ג'רזי קינג?</h2></div>
@@ -513,6 +565,12 @@ input,select,textarea{font-family:inherit}
 <main id="page-store" class="page">
   <div class="store-header">
     <div class="store-header-inner"><h1>החנות</h1><p>מעל 500 גופיות קלאסיות ומודרניות</p></div>
+  </div>
+  <div class="mystery-strip">
+    <div class="mystery-strip-inner">
+      <div class="mystery-strip-text"><strong>📦 קופסת מסתורין</strong> — לא יודע מה לבחור? קבל גופייה אקראית מהקטגוריה שתבחר.</div>
+      <button class="mystery-strip-cta" onclick="nav('mystery')">גלה את הקופסאות ←</button>
+    </div>
   </div>
   <div class="filters-bar">
     <div class="filters-inner">
@@ -552,6 +610,21 @@ input,select,textarea{font-family:inherit}
     <div id="store-grid" class="prod-grid"></div>
     <div id="store-empty" class="empty-state" style="display:none">
       <div class="icon">🔍</div><h3>לא נמצאו גופיות</h3><p>נסה לשנות את הסינונים</p>
+    </div>
+  </div>
+</main>
+
+<!-- MYSTERY PAGE -->
+<main id="page-mystery" class="page" style="padding-top:var(--nav-h);background:#0a0a0a;min-height:100vh">
+  <div style="max-width:1400px;margin:0 auto;padding:3rem 1.5rem 5rem">
+    <div style="margin-bottom:2.5rem">
+      <div class="mystery-eyebrow">קופסת מסתורין</div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.1;margin-bottom:.75rem">בחר קטגוריה.<br><span style="color:var(--accent)">קבל הפתעה.</span></h1>
+      <p style="color:#555;font-size:.95rem;max-width:480px;line-height:1.7">הזמן קופסת מסתורין וקבל גופייה אקראית מהקטגוריה שבחרת. לא יודע מה תקבל — זה כל הכיף.</p>
+    </div>
+    <div class="mystery-grid" id="mystery-page-grid"></div>
+    <div style="margin-top:2.5rem;border-top:1px solid #1a1a1a;padding-top:2rem">
+      <p style="color:#333;font-size:.8rem;line-height:1.7">* הגופייה הספציפית שתקבל נבחרת אקראית מתוך הקטגוריה. ניתן לבחור מידה, שם ומספר בהמשך התהליך. ניתן לבקש החלפה תוך 30 יום.</p>
     </div>
   </div>
 </main>
@@ -999,6 +1072,78 @@ let PRODS=[
    desc:'ליגת האלופות 1994/95 עם קלויברט וסידורף.'},
 ];
 
+/* ── MYSTERY BOXES ── */
+const MYSTERY_BOXES=[
+  {id:'mb-retro',   name:'קופסת רטרו',        icon:'📼', price:149,
+   btnColor:'#d97706', grad:'linear-gradient(135deg,rgba(217,119,6,.12) 0%,transparent 60%)',
+   badgeBg:'rgba(217,119,6,.15)', badgeTxt:'#d97706', badgeLbl:'RETRO',
+   hint:'מנצ׳סטר יונייטד 98/99, ברזיל 1970, אייאקס 94/95 ועוד...',
+   filter:p=>p.era&&(p.era.includes('רטרו')||p.era.includes('שנות ה-2000'))},
+  {id:'mb-europe',  name:'קופסת אירופה',       icon:'🏆', price:179,
+   btnColor:'#1d4ed8', grad:'linear-gradient(135deg,rgba(29,78,216,.12) 0%,transparent 60%)',
+   badgeBg:'rgba(29,78,216,.15)', badgeTxt:'#60a5fa', badgeLbl:'EUROPE',
+   hint:'ריאל מדריד, ברצלונה, ליברפול, בייארן, יובנטוס...',
+   filter:p=>['ריאל מדריד','ברצלונה',"מנצ'סטר יונייטד",'ליברפול',"מנצ'סטר סיטי",'יובנטוס','בייארן מינכן','אייאקס'].includes(p.team)},
+  {id:'mb-national',name:'קופסת נבחרות',       icon:'🌍', price:159,
+   btnColor:'#059669', grad:'linear-gradient(135deg,rgba(5,150,105,.12) 0%,transparent 60%)',
+   badgeBg:'rgba(5,150,105,.15)', badgeTxt:'#34d399', badgeLbl:'NATIONS',
+   hint:'ברזיל, ארגנטינה ונבחרות נוספות',
+   filter:p=>p.league==='נבחרות'},
+  {id:'mb-israel',  name:'קופסת ישראל',        icon:'🇮🇱', price:99,
+   btnColor:'#1d4ed8', grad:'linear-gradient(135deg,rgba(29,78,216,.1) 0%,transparent 60%)',
+   badgeBg:'rgba(29,78,216,.15)', badgeTxt:'#93c5fd', badgeLbl:'ISRAEL',
+   hint:'מכבי תל אביב, הפועל תל אביב — ליגת העל',
+   filter:p=>p.league==='ליגת העל'},
+  {id:'mb-current', name:'קופסת עונה 24/25',   icon:'⚡', price:169,
+   btnColor:'#7c3aed', grad:'linear-gradient(135deg,rgba(124,58,237,.12) 0%,transparent 60%)',
+   badgeBg:'rgba(124,58,237,.15)', badgeTxt:'#c4b5fd', badgeLbl:'2024/25',
+   hint:'גופיות העונה הנוכחית של הליגות הגדולות',
+   filter:p=>p.era==='2024/25 עונה נוכחית'},
+  {id:'mb-premium', name:'קופסת פרמיום 💎',    icon:'👑', price:219,
+   btnColor:'#c8102e', grad:'linear-gradient(135deg,rgba(200,16,46,.15) 0%,transparent 60%)',
+   badgeBg:'rgba(200,16,46,.15)', badgeTxt:'#f87171', badgeLbl:'PREMIUM',
+   hint:'רק הגופיות הנדירות והיקרות ביותר — הפתעה מוחלטת!',
+   filter:p=>p.price>=200},
+];
+
+function mysteryCard(box,compact){
+  const items=PRODS.filter(box.filter);
+  return `<div class="mystery-card" style="--mc-grad:${box.grad};--mc-badge-bg:${box.badgeBg};--mc-badge:${box.badgeTxt};--mc-btn:${box.btnColor}">
+    <div class="mystery-card-top">
+      <span class="mystery-icon">${box.icon}</span>
+      <span class="mystery-badge">${box.badgeLbl}</span>
+    </div>
+    <div class="mystery-qmark">?</div>
+    <div class="mystery-name">${box.name}</div>
+    <div class="mystery-hint">${box.hint}</div>
+    <div class="mystery-footer">
+      <div class="mystery-price"><small>החל מ</small>₪${box.price}</div>
+      <button class="mystery-btn" onclick="event.stopPropagation();addMysteryToCart('${box.id}')">הזמן קופסה</button>
+    </div>
+  </div>`;
+}
+
+function renderMystery(){
+  const home=document.getElementById('home-mystery-grid');
+  const page=document.getElementById('mystery-page-grid');
+  const html=MYSTERY_BOXES.map(b=>mysteryCard(b)).join('');
+  if(home)home.innerHTML=html;
+  if(page)page.innerHTML=html;
+}
+
+function addMysteryToCart(boxId){
+  const box=MYSTERY_BOXES.find(b=>b.id===boxId);
+  if(!box)return;
+  const eligible=PRODS.filter(box.filter);
+  if(!eligible.length){toast('אין גופיות בקטגוריה זו');return;}
+  const picked=eligible[Math.floor(Math.random()*eligible.length)];
+  const key=`mystery|${boxId}|${Date.now()}`;
+  cart.push({_k:key,id:picked.id,name:`${box.name} → ${picked.name}`,price:box.price,img:picked.imageUrls?.front||picked.img,size:'M',cName:'',cNum:'',qty:1});
+  saveCart();refreshCart();
+  toast(`🎁 נחשף! קיבלת: ${picked.name}`);
+}
+window.addMysteryToCart=addMysteryToCart;
+
 let cart=JSON.parse(localStorage.getItem('jk2_cart')||'[]');
 let curProd=null,selSz='L',selPay='paypal',editId=null;
 function saveCart(){localStorage.setItem('jk2_cart',JSON.stringify(cart));}
@@ -1034,6 +1179,7 @@ function nav(p){
   window.scrollTo({top:0,behavior:'smooth'});
   if(p==='home')renderFeatured();
   if(p==='store')renderStore();
+  if(p==='mystery')renderMystery();
   if(p==='checkout')renderCheckout();
   if(p==='admin'){renderAdminProds();loadOrders();}
   if(p==='product'){setTimeout(()=>{window._3dinit?.();window._3dready=true;},80);}
@@ -1216,7 +1362,7 @@ function delProd(id){if(!confirm('למחוק מוצר זה?'))return;PRODS=PRODS
 window.delProd=delProd;
 let _tt;
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(_tt);_tt=setTimeout(()=>el.style.display='none',3000);}
-refreshCart();nav('home');
+refreshCart();renderMystery();nav('home');
 </script>
 </body>
 </html>
