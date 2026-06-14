@@ -861,7 +861,10 @@ input,select,textarea{font-family:inherit}
           <div class="bank-row"><span>סכום:</span><span id="bit-total" style="font-weight:700"></span></div>
           <div class="bank-row"><span>בהערה כתוב:</span><span style="color:var(--text2);font-size:.8rem">שם מלא + מספר הזמנה</span></div>
         </div>
-        <p style="font-size:.75rem;color:var(--text2);margin-top:.75rem;line-height:1.6">לאחר התשלום, לחץ על "אשר הזמנה" — נאשר את ההזמנה לאחר קבלת התשלום.</p>
+        <label style="display:flex;align-items:flex-start;gap:.625rem;margin-top:1rem;cursor:pointer">
+          <input type="checkbox" id="bit-confirm" style="margin-top:.2rem;width:1rem;height:1rem;flex-shrink:0;accent-color:var(--text)">
+          <span style="font-size:.85rem;font-weight:600;line-height:1.5">שלחתי את התשלום של <strong id="bit-confirm-amt"></strong> ב-Bit למספר 058-7701544</span>
+        </label>
       </div>
       <div id="pm-paypal" style="display:none">
         <div class="paypal-wrap">
@@ -1461,7 +1464,12 @@ function setPay(m){
     document.getElementById('pm-'+k).style.display=m===k?'block':'none';
     document.getElementById('pb-'+k).className='pay-btn'+(m===k?' active':'');
   });
-  if(m==='bit'){const el=document.getElementById('bit-total');if(el)el.textContent='₪'+cartTotal();}
+  if(m==='bit'){
+    const t='₪'+cartTotal();
+    const el=document.getElementById('bit-total');if(el)el.textContent=t;
+    const ca=document.getElementById('bit-confirm-amt');if(ca)ca.textContent=t;
+    const cb=document.getElementById('bit-confirm');if(cb)cb.checked=false;
+  }
 }
 window.setPay=setPay;
 function fmtCard(inp){
@@ -1491,6 +1499,9 @@ async function submitOrder(){
   const city=document.getElementById('s-city')?.value?.trim();
   if(!name||!phone||!addr||!city){toast('אנא מלא את כל שדות החובה');return;}
   if(!cart.length){toast('העגלה ריקה');return;}
+  if(selPay==='bit'){
+    if(!document.getElementById('bit-confirm')?.checked){toast('אנא אשר שהתשלום ב-Bit נשלח לפני סיום ההזמנה');return;}
+  }
   if(selPay==='card'){
     const ccNum=(document.getElementById('cc-num')?.value||'').replace(/\s/g,'');
     const ccExp=document.getElementById('cc-exp')?.value||'';
