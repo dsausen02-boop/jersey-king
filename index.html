@@ -790,12 +790,20 @@ function makeCanvasTex(hexColor, label) {
   return t;
 }
 
+/* ── proxy any URL through wsrv.nl for guaranteed CORS headers ── */
+function corsProxy(url) {
+  if (!url) return url;
+  if (url.startsWith('https://wsrv.nl/')) return url;
+  return 'https://wsrv.nl/?url=' + encodeURIComponent(url) + '&w=600&h=800&fit=cover';
+}
+
 /* ── texture loader with CORS + error fallback ── */
 function loadTex(url, fallbackColor, fallbackLabel, cb) {
-  if (!url) { cb(makeCanvasTex(fallbackColor, fallbackLabel)); return; }
+  const proxied = corsProxy(url);
+  if (!proxied) { cb(makeCanvasTex(fallbackColor, fallbackLabel)); return; }
   const loader = new THREE.TextureLoader();
   loader.crossOrigin = 'anonymous';
-  loader.load(url,
+  loader.load(proxied,
     tex => { tex.colorSpace = THREE.SRGBColorSpace; cb(tex); },
     undefined,
     () => cb(makeCanvasTex(fallbackColor, fallbackLabel))
