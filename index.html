@@ -388,13 +388,15 @@ input,select,textarea{font-family:inherit}
 .mystery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:var(--r-lg);overflow:hidden}
 @media(max-width:900px){.mystery-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.mystery-grid{grid-template-columns:1fr}}
-.mystery-card{background:#111;padding:1.75rem;cursor:pointer;display:flex;flex-direction:column;gap:.875rem;transition:background .2s ease;position:relative;overflow:hidden}
-.mystery-card::before{content:'';position:absolute;inset:0;background:var(--mc-grad,linear-gradient(135deg,rgba(200,16,46,.08) 0%,transparent 60%));pointer-events:none}
+.mystery-card{background:#111;cursor:pointer;display:flex;flex-direction:column;transition:background .2s ease;position:relative;overflow:hidden}
 .mystery-card:hover{background:#161616}
-.mystery-card-top{display:flex;justify-content:space-between;align-items:flex-start}
-.mystery-icon{font-size:2rem;line-height:1}
-.mystery-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-full);background:var(--mc-badge-bg,rgba(200,16,46,.15));color:var(--mc-badge,#c8102e)}
-.mystery-qmark{font-size:3.5rem;font-weight:900;color:#1f1f1f;text-align:center;line-height:1;margin:.25rem 0;letter-spacing:-.04em;font-family:'Rubik',sans-serif}
+.mystery-img-wrap{position:relative;height:200px;overflow:hidden;flex-shrink:0}
+.mystery-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(.7) brightness(.55);transition:transform .4s ease,filter .4s ease}
+.mystery-card:hover .mystery-img-wrap img{transform:scale(1.06);filter:saturate(.85) brightness(.65)}
+.mystery-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.2) 0%,rgba(17,17,17,.9) 100%)}
+.mystery-img-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
+.mystery-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-full)}
+.mystery-qmark{font-size:4rem;font-weight:900;color:rgba(255,255,255,.18);line-height:1;letter-spacing:-.04em;font-family:'Rubik',sans-serif}
 .mystery-name{font-size:1rem;font-weight:700;color:#fff;letter-spacing:-.01em}
 .mystery-hint{font-size:.75rem;color:#555;line-height:1.5}
 .mystery-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:.875rem;border-top:1px solid #1f1f1f}
@@ -423,7 +425,7 @@ input,select,textarea{font-family:inherit}
     <div class="nav-links">
       <a onclick="nav('home')">בית</a>
       <a onclick="nav('store')">חנות</a>
-      <a onclick="nav('mystery')" style="color:var(--accent);font-weight:700">📦 קופסת מסתורין</a>
+      <a onclick="nav('mystery')" style="color:var(--accent);font-weight:700">📦 Mystery Box</a>
       <a onclick="nav('admin')">ניהול</a>
     </div>
     <div class="nav-right">
@@ -440,7 +442,7 @@ input,select,textarea{font-family:inherit}
   <div class="mobile-nav" id="mobile-nav">
     <a onclick="nav('home');toggleMenu()">בית</a>
     <a onclick="nav('store');toggleMenu()">חנות</a>
-    <a onclick="nav('mystery');toggleMenu()" style="color:var(--accent);font-weight:700">📦 קופסת מסתורין</a>
+    <a onclick="nav('mystery');toggleMenu()" style="color:var(--accent);font-weight:700">📦 Mystery Box</a>
     <a onclick="nav('admin');toggleMenu()">ניהול</a>
   </div>
 </nav>
@@ -523,7 +525,7 @@ input,select,textarea{font-family:inherit}
     <div class="mystery-section-inner">
       <div class="mystery-section-head">
         <div>
-          <div class="mystery-eyebrow">חדש · קופסת מסתורין</div>
+          <div class="mystery-eyebrow">חדש · Mystery Box</div>
           <h2>לא יודע מה לבחור?</h2>
           <p style="color:#555;font-size:.875rem;margin-top:.375rem">הזמן קופסה — קבל גופייה אקראית מהקטגוריה שבחרת.</p>
         </div>
@@ -568,7 +570,7 @@ input,select,textarea{font-family:inherit}
   </div>
   <div class="mystery-strip">
     <div class="mystery-strip-inner">
-      <div class="mystery-strip-text"><strong>📦 קופסת מסתורין</strong> — לא יודע מה לבחור? קבל גופייה אקראית מהקטגוריה שתבחר.</div>
+      <div class="mystery-strip-text"><strong>📦 Mystery Box</strong> — לא יודע מה לבחור? קבל גופייה אקראית מהקטגוריה שתבחר.</div>
       <button class="mystery-strip-cta" onclick="nav('mystery')">גלה את הקופסאות ←</button>
     </div>
   </div>
@@ -618,9 +620,9 @@ input,select,textarea{font-family:inherit}
 <main id="page-mystery" class="page" style="padding-top:var(--nav-h);background:#0a0a0a;min-height:100vh">
   <div style="max-width:1400px;margin:0 auto;padding:3rem 1.5rem 5rem">
     <div style="margin-bottom:2.5rem">
-      <div class="mystery-eyebrow">קופסת מסתורין</div>
+      <div class="mystery-eyebrow">Mystery Box</div>
       <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.1;margin-bottom:.75rem">בחר קטגוריה.<br><span style="color:var(--accent)">קבל הפתעה.</span></h1>
-      <p style="color:#555;font-size:.95rem;max-width:480px;line-height:1.7">הזמן קופסת מסתורין וקבל גופייה אקראית מהקטגוריה שבחרת. לא יודע מה תקבל — זה כל הכיף.</p>
+      <p style="color:#555;font-size:.95rem;max-width:480px;line-height:1.7">הזמן Mystery Box וקבל גופייה אקראית מהקטגוריה שבחרת. לא יודע מה תקבל — זה כל הכיף.</p>
     </div>
     <div class="mystery-grid" id="mystery-page-grid"></div>
     <div style="margin-top:2.5rem;border-top:1px solid #1a1a1a;padding-top:2rem">
@@ -1023,8 +1025,8 @@ let sb=null;try{sb=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
 
 let PRODS=[
   {id:1,name:'ריאל מדריד — בית 2024/25',team:'ריאל מדריד',league:'לה ליגה',era:'2024/25 עונה נוכחית',price:189,badge:'הכי נמכר',stock:30,color:'#EFEFEF',logo:'https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg',
-   img:'https://image.pollinations.ai/prompt/professional%20male%20football%20player%20wearing%20Real%20Madrid%20all-white%20home%20jersey%2C%20standing%20pose%2C%20pure%20white%20studio%20background%2C%20full%20body%2C%20photorealistic?width=600&height=700&seed=101&nologo=true&model=flux',
-   imageUrls:{front:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgxKvmHoaJWN4mk6JEPjr91H4RhttYP4dGsRyM5KD1GgIqO_TeoyBHH-hozEdyKCukLoU4om2wFIW-IRbbj2RVz_tlcWjF9OCn8aaf-lEh4fUAfzauN_RXG7KTDs9NJW3ltRRpLTU1VRUdNvB9P3fvGzOMl949cjma5WLg87b26iVWQHLQrHjAhOdu3Z0/s1600/real-madrid-24-25-kit-2.jpg',back:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiztZ-4BHxrGn7JkVtoS4SDRIbl6mRi_AAuQBQ_GdaV41TmwnJeo9wfsuTwy7ue-VKl8Z4_FvBS9_5a7B0kFP1EWaRBS_7t_EYNyUshE7m1606yei0aqVgJxtIOg3VtXbKGZL4LscXc2DCDtE2UeynmOPoCQzQQ9HcmW-SXfS7y7sQE19kNdvRRBm3KNXc/s1600/real-madrid-24-25-kit-12.jpg',awayFront:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiztZ-4BHxrGn7JkVtoS4SDRIbl6mRi_AAuQBQ_GdaV41TmwnJeo9wfsuTwy7ue-VKl8Z4_FvBS9_5a7B0kFP1EWaRBS_7t_EYNyUshE7m1606yei0aqVgJxtIOg3VtXbKGZL4LscXc2DCDtE2UeynmOPoCQzQQ9HcmW-SXfS7y7sQE19kNdvRRBm3KNXc/s1600/real-madrid-24-25-away-kit%20%281%29.jpg',awayBack:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhC0UCK5plo81tSrS_Fcdrp6N_UZpduIw0k_Qx3HV-gUHGDzQHtSv74bvku9EHq9WLuFj3WB7vzpXn5x49nXHlMT35cEGbm4w63iy_DRygWVT85PzWV-9AFFT3wu6ajOA4qCBdcPDnzYKs6YX6sGAoKXIPg1ZgYNG04yOGXdiXQHicB78ADhD1JpRuguPc/s1600/real-madrid-24-25-away-kit%20%2827%29.jpg'},
+   img:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgl0goqe0oPZcZubJbhNd9S767H9D34t1auC_IYMRusPxo4YANlZC-N1o9fOahbOFT-GR2yAOZtpvOvTjytHIRu3yT3g1enFCuIIfHnvvJDZ-b66-ZNh7Kk1oKF440htH8ydMrDUS3VrJENB-G3AHr7T3Xm6xygPtO7l9a1_EEQiRxALgoztHHOoaxZ-ole/s1600/Real%20Madrid%2024-25%20Home%20Kit%20Leaked%20%20%281%29.jpg',
+   imageUrls:{front:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgl0goqe0oPZcZubJbhNd9S767H9D34t1auC_IYMRusPxo4YANlZC-N1o9fOahbOFT-GR2yAOZtpvOvTjytHIRu3yT3g1enFCuIIfHnvvJDZ-b66-ZNh7Kk1oKF440htH8ydMrDUS3VrJENB-G3AHr7T3Xm6xygPtO7l9a1_EEQiRxALgoztHHOoaxZ-ole/s1600/Real%20Madrid%2024-25%20Home%20Kit%20Leaked%20%20%281%29.jpg',back:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiztZ-4BHxrGn7JkVtoS4SDRIbl6mRi_AAuQBQ_GdaV41TmwnJeo9wfsuTwy7ue-VKl8Z4_FvBS9_5a7B0kFP1EWaRBS_7t_EYNyUshE7m1606yei0aqVgJxtIOg3VtXbKGZL4LscXc2DCDtE2UeynmOPoCQzQQ9HcmW-SXfS7y7sQE19kNdvRRBm3KNXc/s1600/real-madrid-24-25-kit-12.jpg',awayFront:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiztZ-4BHxrGn7JkVtoS4SDRIbl6mRi_AAuQBQ_GdaV41TmwnJeo9wfsuTwy7ue-VKl8Z4_FvBS9_5a7B0kFP1EWaRBS_7t_EYNyUshE7m1606yei0aqVgJxtIOg3VtXbKGZL4LscXc2DCDtE2UeynmOPoCQzQQ9HcmW-SXfS7y7sQE19kNdvRRBm3KNXc/s1600/real-madrid-24-25-away-kit%20%281%29.jpg',awayBack:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhC0UCK5plo81tSrS_Fcdrp6N_UZpduIw0k_Qx3HV-gUHGDzQHtSv74bvku9EHq9WLuFj3WB7vzpXn5x49nXHlMT35cEGbm4w63iy_DRygWVT85PzWV-9AFFT3wu6ajOA4qCBdcPDnzYKs6YX6sGAoKXIPg1ZgYNG04yOGXdiXQHicB78ADhD1JpRuguPc/s1600/real-madrid-24-25-away-kit%20%2827%29.jpg'},
    desc:'גופיית הבית הרשמית לעונת 2024/25. בד AdZero קל ונושם, לוגו רקום.'},
   {id:2,name:'ברצלונה — בית',team:'ברצלונה',league:'לה ליגה',era:'2024/25 עונה נוכחית',price:179,badge:'חדש',stock:22,color:'#004D98',logo:'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg',
    img:'https://image.pollinations.ai/prompt/professional%20male%20football%20player%20wearing%20FC%20Barcelona%20blue%20and%20red%20striped%20home%20jersey%2C%20standing%20pose%2C%20pure%20white%20studio%20background%2C%20full%20body%2C%20photorealistic?width=600&height=700&seed=102&nologo=true&model=flux',
@@ -1044,7 +1046,7 @@ let PRODS=[
    desc:'גופיית הבית הצהוב-כחולה של אלופת ישראל.'},
   {id:6,name:'ברזיל — 1970 רטרו',team:'ברזיל',league:'נבחרות',era:'רטרו - שנות ה-70',price:249,badge:'רטרו',stock:8,color:'#F7D02C',logo:'https://upload.wikimedia.org/wikipedia/commons/5/5d/CBF_logo.svg',
    img:'https://image.pollinations.ai/prompt/professional%20male%20football%20player%20wearing%20Brazil%201970%20retro%20yellow%20jersey%20green%20collar%20classic%20vintage%20football%20kit%2C%20standing%20pose%2C%20pure%20white%20studio%20background%2C%20full%20body%2C%20photorealistic?width=600&height=700&seed=106&nologo=true&model=flux',
-   imageUrls:{front:'https://wsrv.nl/?url=https://theretrokit.com/wp-content/uploads/2026/05/brazil-1970-home-kit-1.webp&w=600&h=700&fit=cover',back:'https://wsrv.nl/?url=https://theretrokit.com/wp-content/uploads/2026/05/brazil-1970-home-kit-2.webp&w=600&h=700&fit=cover',awayFront:'https://wsrv.nl/?url=https://theretrokit.com/wp-content/uploads/2026/05/brazil-1970-home-kit-3.webp&w=600&h=700&fit=cover',awayBack:null},
+   imageUrls:{front:'https://wsrv.nl/?url=https%3A%2F%2Fretrosleague.com%2Fcdn%2Fshop%2Fproducts%2Fa51_8fb51bb3-c5a7-49ba-806c-337549f4c694_1946x.jpg%3Fv%3D1653338599&w=600&h=700&fit=cover',back:'https://wsrv.nl/?url=https%3A%2F%2Fretrosleague.com%2Fcdn%2Fshop%2Fproducts%2Fa52_c71915a1-5b1c-4035-bf26-a7c9ba4e1edd_1946x.jpg%3Fv%3D1653338599&w=600&h=700&fit=cover',awayFront:'https://wsrv.nl/?url=https%3A%2F%2Fretrosleague.com%2Fcdn%2Fshop%2Fproducts%2Fa53_fa43b6f8-d167-4a69-be03-15d50005d29f_1946x.jpg%3Fv%3D1653338599&w=600&h=700&fit=cover',awayBack:null},
    desc:'פלה, זיקו, טוסטאו — גביע עולם מקסיקו 1970. ריפרודוקציה קלאסית.'},
   {id:7,name:'ארגנטינה — אלוף העולם 2022',team:'ארגנטינה',league:'נבחרות',era:'שנות ה-2000',price:199,badge:'מבצע',stock:20,color:'#75AADB',logo:'https://upload.wikimedia.org/wikipedia/commons/a/a9/AFA_logo_%28crest%29.svg',
    img:'https://image.pollinations.ai/prompt/professional%20male%20football%20player%20wearing%20Argentina%20light%20blue%20white%20striped%20World%20Cup%202022%20jersey%2C%20standing%20pose%2C%20pure%20white%20studio%20background%2C%20full%20body%2C%20photorealistic?width=600&height=700&seed=107&nologo=true&model=flux',
@@ -1075,50 +1077,57 @@ let PRODS=[
 /* ── MYSTERY BOXES ── */
 const MYSTERY_BOXES=[
   {id:'mb-retro',   name:'קופסת רטרו',        icon:'📼', price:149,
-   btnColor:'#d97706', grad:'linear-gradient(135deg,rgba(217,119,6,.12) 0%,transparent 60%)',
-   badgeBg:'rgba(217,119,6,.15)', badgeTxt:'#d97706', badgeLbl:'RETRO',
+   btnColor:'#d97706', badgeLbl:'RETRO',
+   repImg:'https://wsrv.nl/?url=https%3A%2F%2Fwww.cultkits.com%2Fcdn%2Fshop%2Ffiles%2F199899-ajax-home-shirt-l-umbro-cult-kits-5726105.jpg&w=400&h=500&fit=cover',
    hint:'מנצ׳סטר יונייטד 98/99, ברזיל 1970, אייאקס 94/95 ועוד...',
    filter:p=>p.era&&(p.era.includes('רטרו')||p.era.includes('שנות ה-2000'))},
   {id:'mb-europe',  name:'קופסת אירופה',       icon:'🏆', price:179,
-   btnColor:'#1d4ed8', grad:'linear-gradient(135deg,rgba(29,78,216,.12) 0%,transparent 60%)',
-   badgeBg:'rgba(29,78,216,.15)', badgeTxt:'#60a5fa', badgeLbl:'EUROPE',
+   btnColor:'#1d4ed8', badgeLbl:'EUROPE',
+   repImg:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgwzXPoSPWuLPHU1QMJWLPXDaxrY6E-AQVOEdNYrEa0mvJYceS2uG_6YLCwYnwJv6eewEREqcbdVOCIfiUR8_4qaooeD5LOKyLezgt5fkrw2kUXHH8pR1SsWeumKBRnE5OKKcCQZAVrX5JwF_TOYxiqYRyd7yhkW847szZcwRNylT2A6OqZ-sYmT9jH8DA/s1600/barcelona%2024-25-home-kit%20%286%29.jpg',
    hint:'ריאל מדריד, ברצלונה, ליברפול, בייארן, יובנטוס...',
    filter:p=>['ריאל מדריד','ברצלונה',"מנצ'סטר יונייטד",'ליברפול',"מנצ'סטר סיטי",'יובנטוס','בייארן מינכן','אייאקס'].includes(p.team)},
   {id:'mb-national',name:'קופסת נבחרות',       icon:'🌍', price:159,
-   btnColor:'#059669', grad:'linear-gradient(135deg,rgba(5,150,105,.12) 0%,transparent 60%)',
-   badgeBg:'rgba(5,150,105,.15)', badgeTxt:'#34d399', badgeLbl:'NATIONS',
+   btnColor:'#059669', badgeLbl:'NATIONS',
+   repImg:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjqidxxeyzfct4iiTG6Qs_fPEiMOVmfd6rkOAgznwMG9nwGU5y4xKDx6dLoeus6ORbUDVsgqrQtJ7Fw9QK6YEDclvHWZTg-_ehMM0WSWzU_ZBX4FT4ywrEyhEz8tZtao2mkhI0roAdI8Bt357pVhwjgmSZmJ1z0WZu7b46w_bdI0ib_VfVvqQOkD8zM9gdd/s1600/argentina-2024-home-kit%20%282%29.jpg',
    hint:'ברזיל, ארגנטינה ונבחרות נוספות',
    filter:p=>p.league==='נבחרות'},
   {id:'mb-israel',  name:'קופסת ישראל',        icon:'🇮🇱', price:99,
-   btnColor:'#1d4ed8', grad:'linear-gradient(135deg,rgba(29,78,216,.1) 0%,transparent 60%)',
-   badgeBg:'rgba(29,78,216,.15)', badgeTxt:'#93c5fd', badgeLbl:'ISRAEL',
+   btnColor:'#1d4ed8', badgeLbl:'ISRAEL',
+   repImg:'https://wsrv.nl/?url=https%3A%2F%2Fstatic.maccabi-tlv.co.il%2Fwp-content%2Fuploads%2F2024%2F07%2FMTA_20240713071443a89f06f375acc4889297c4675e6ef0b4-460x460.jpg&w=400&h=500&fit=cover',
    hint:'מכבי תל אביב, הפועל תל אביב — ליגת העל',
    filter:p=>p.league==='ליגת העל'},
   {id:'mb-current', name:'קופסת עונה 24/25',   icon:'⚡', price:169,
-   btnColor:'#7c3aed', grad:'linear-gradient(135deg,rgba(124,58,237,.12) 0%,transparent 60%)',
-   badgeBg:'rgba(124,58,237,.15)', badgeTxt:'#c4b5fd', badgeLbl:'2024/25',
+   btnColor:'#7c3aed', badgeLbl:'2024/25',
+   repImg:'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi8NnUG2e4UpXg3NWpb8pFuepPFvzYSwmLMGeiTmCuYXsO9zpQZXksZ_aytzP4YfP6wi-7rL-zXzERq-7GnRHuPH5IUeDw_cg3j76rmgItY2SpSAFfgW9tvB6UsxKup8eu-TigE6GI5T9EIu2u2gRtSFyqu4Xd8YwRT9tPbNx9B-pbCyCNzvArmkfgSQMg/s1600/manchester-city-24-25-home-kit%20%2816%29.jpg',
    hint:'גופיות העונה הנוכחית של הליגות הגדולות',
    filter:p=>p.era==='2024/25 עונה נוכחית'},
-  {id:'mb-premium', name:'קופסת פרמיום 💎',    icon:'👑', price:219,
-   btnColor:'#c8102e', grad:'linear-gradient(135deg,rgba(200,16,46,.15) 0%,transparent 60%)',
-   badgeBg:'rgba(200,16,46,.15)', badgeTxt:'#f87171', badgeLbl:'PREMIUM',
+  {id:'mb-premium', name:'קופסת פרמיום',       icon:'👑', price:219,
+   btnColor:'#c8102e', badgeLbl:'PREMIUM',
+   repImg:'https://wsrv.nl/?url=https%3A%2F%2Fwww.cultkits.com%2Fcdn%2Fshop%2Ffiles%2F200203-juventus-salas-9-home-shirt-l-lotto-cult-kits-9929903.jpg&w=400&h=500&fit=cover',
    hint:'רק הגופיות הנדירות והיקרות ביותר — הפתעה מוחלטת!',
    filter:p=>p.price>=200},
 ];
 
-function mysteryCard(box,compact){
-  const items=PRODS.filter(box.filter);
-  return `<div class="mystery-card" style="--mc-grad:${box.grad};--mc-badge-bg:${box.badgeBg};--mc-badge:${box.badgeTxt};--mc-btn:${box.btnColor}">
-    <div class="mystery-card-top">
-      <span class="mystery-icon">${box.icon}</span>
-      <span class="mystery-badge">${box.badgeLbl}</span>
+function mysteryCard(box){
+  return `<div class="mystery-card" style="--mc-btn:${box.btnColor}">
+    <div class="mystery-img-wrap">
+      <img src="${box.repImg}" alt="${box.name}" loading="lazy" onerror="this.style.opacity='.15'">
+      <div class="mystery-img-overlay"></div>
+      <div class="mystery-img-content">
+        <span class="mystery-badge" style="background:rgba(0,0,0,.5);color:#fff;border:1px solid rgba(255,255,255,.15)">${box.badgeLbl}</span>
+        <div class="mystery-qmark">?</div>
+      </div>
     </div>
-    <div class="mystery-qmark">?</div>
-    <div class="mystery-name">${box.name}</div>
-    <div class="mystery-hint">${box.hint}</div>
-    <div class="mystery-footer">
-      <div class="mystery-price"><small>החל מ</small>₪${box.price}</div>
-      <button class="mystery-btn" onclick="event.stopPropagation();addMysteryToCart('${box.id}')">הזמן קופסה</button>
+    <div style="padding:1.25rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.625rem;flex:1">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <span style="font-size:1.25rem">${box.icon}</span>
+        <span class="mystery-name">${box.name}</span>
+      </div>
+      <div class="mystery-hint">${box.hint}</div>
+      <div class="mystery-footer">
+        <div class="mystery-price"><small>החל מ </small>₪${box.price}</div>
+        <button class="mystery-btn" style="background:${box.btnColor}" onclick="event.stopPropagation();addMysteryToCart('${box.id}')">הזמן קופסה 📦</button>
+      </div>
     </div>
   </div>`;
 }
