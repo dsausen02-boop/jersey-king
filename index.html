@@ -1500,7 +1500,10 @@ async function submitOrder(){
   }
   const oid='JK-'+Date.now().toString().slice(-7);
   const order={order_id:oid,customer_name:name,phone,address:addr+', '+city,city,total:cartTotal(),payment_method:selPay,items:cart,notes:document.getElementById('o-notes')?.value||'',status:'חדש',created_at:new Date().toISOString()};
-  if(sb){try{await sb.from('orders').insert([order]);}catch(e){console.warn('Supabase:',e);}}
+  if(sb){
+    const{error:sbErr}=await sb.from('orders').insert([order]);
+    if(sbErr){toast('שגיאה בשמירת הזמנה: '+sbErr.message);console.error('Supabase insert error:',sbErr);return;}
+  }
   document.getElementById('order-success').style.display='block';
   document.getElementById('submit-btn').style.display='none';
   document.getElementById('order-num').textContent='מספר הזמנה: '+oid;
