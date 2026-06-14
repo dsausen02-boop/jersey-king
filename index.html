@@ -431,7 +431,6 @@ input,select,textarea{font-family:inherit}
       <a onclick="nav('home')">בית</a>
       <a onclick="nav('store')">חנות</a>
       <a onclick="nav('mystery')" style="color:var(--accent);font-weight:700">📦 Mystery Box</a>
-      <a onclick="nav('admin')">ניהול</a>
     </div>
     <div class="nav-right">
       <button class="nav-cart" onclick="openCart()" aria-label="עגלת קניות">
@@ -448,7 +447,6 @@ input,select,textarea{font-family:inherit}
     <a onclick="nav('home');toggleMenu()">בית</a>
     <a onclick="nav('store');toggleMenu()">חנות</a>
     <a onclick="nav('mystery');toggleMenu()" style="color:var(--accent);font-weight:700">📦 Mystery Box</a>
-    <a onclick="nav('admin');toggleMenu()">ניהול</a>
   </div>
 </nav>
 
@@ -838,8 +836,9 @@ input,select,textarea{font-family:inherit}
       <h2>אמצעי תשלום</h2>
       <div class="pay-methods">
         <button class="pay-btn active" id="pb-card" onclick="setPay('card')"><i class="fas fa-credit-card"></i> כרטיס אשראי</button>
-        <button class="pay-btn" id="pb-paypal" onclick="setPay('paypal')"><i class="fab fa-paypal"></i> PayPal</button>
+        <button class="pay-btn" id="pb-bit" onclick="setPay('bit')"><img src="https://upload.wikimedia.org/wikipedia/he/thumb/9/9e/Bit_logo.svg/120px-Bit_logo.svg.png" style="height:14px;vertical-align:middle"> Bit</button>
         <button class="pay-btn" id="pb-bank" onclick="setPay('bank')"><i class="fas fa-building-columns"></i> העברה בנקאית</button>
+        <button class="pay-btn" id="pb-paypal" onclick="setPay('paypal')"><i class="fab fa-paypal"></i> PayPal</button>
       </div>
       <div id="pm-card">
         <div class="form-grid" style="margin-top:1rem">
@@ -855,6 +854,14 @@ input,select,textarea{font-family:inherit}
           <div class="form-field full"><label>שם בעל הכרטיס</label><input id="cc-name" type="text" placeholder="ISRAEL ISRAELOV"></div>
         </div>
         <p style="font-size:.72rem;color:var(--text2);margin-top:.75rem;display:flex;align-items:center;gap:.4rem"><i class="fas fa-lock" style="color:#059669"></i> חיבור מוצפן SSL 256-bit · פרטי הכרטיס מאובטחים</p>
+      </div>
+      <div id="pm-bit" style="display:none;margin-top:1rem">
+        <div class="bank-details">
+          <div class="bank-row"><span>שלח תשלום ב-Bit למספר:</span><span style="font-weight:800;font-size:1.05rem;letter-spacing:.04em">050-0000000</span></div>
+          <div class="bank-row"><span>סכום:</span><span id="bit-total" style="font-weight:700"></span></div>
+          <div class="bank-row"><span>בהערה כתוב:</span><span style="color:var(--text2);font-size:.8rem">שם מלא + מספר הזמנה</span></div>
+        </div>
+        <p style="font-size:.75rem;color:var(--text2);margin-top:.75rem;line-height:1.6">לאחר התשלום, לחץ על "אשר הזמנה" — נאשר את ההזמנה לאחר קבלת התשלום.</p>
       </div>
       <div id="pm-paypal" style="display:none">
         <div class="paypal-wrap">
@@ -897,78 +904,6 @@ input,select,textarea{font-family:inherit}
 </main>
 
 <!-- ADMIN -->
-<main id="page-admin" class="page" style="padding-top:var(--nav-h);background:var(--bg2)">
-  <div class="admin-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.75rem">
-      <div><h1>לוח ניהול</h1><p class="sub">נהל מוצרים והזמנות</p></div>
-      <button class="btn-black" onclick="openModal()" style="font-size:.8rem;padding:.5rem 1rem">+ הוסף מוצר</button>
-    </div>
-    <div class="admin-stats">
-      <div class="stat-card"><div class="stat-num" id="a-prods">0</div><div class="stat-lbl">מוצרים</div></div>
-      <div class="stat-card"><div class="stat-num" id="a-orders">—</div><div class="stat-lbl">הזמנות</div></div>
-      <div class="stat-card"><div class="stat-num" id="a-rev">—</div><div class="stat-lbl">הכנסות</div></div>
-      <div class="stat-card"><div class="stat-num">4.9 ⭐</div><div class="stat-lbl">דירוג</div></div>
-    </div>
-    <div class="tabs">
-      <button class="tab-btn active" id="tab-p" onclick="aTab('products')">מוצרים</button>
-      <button class="tab-btn" id="tab-o" onclick="aTab('orders')">הזמנות</button>
-    </div>
-    <div id="panel-products">
-      <table class="data-table">
-        <thead><tr><th>פעולות</th><th>מלאי</th><th>מחיר</th><th>עונה</th><th>קבוצה</th><th>שם מוצר</th></tr></thead>
-        <tbody id="prod-tbody"></tbody>
-      </table>
-    </div>
-    <div id="panel-orders" style="display:none">
-      <table class="data-table">
-        <thead><tr><th>סטטוס</th><th>פריטים</th><th>סכום</th><th>תשלום</th><th>עיר</th><th>שם לקוח</th><th>תאריך</th><th>מספר הזמנה</th></tr></thead>
-        <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text2)">טוען הזמנות...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-  <div class="modal-bg" id="prod-modal">
-    <div class="modal">
-      <div class="modal-head">
-        <h2 id="modal-title">הוסף מוצר</h2>
-        <button class="modal-close-btn" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
-      </div>
-      <div class="modal-fields">
-        <div class="form-field"><label>שם הגופייה *</label><input id="m-name" type="text" placeholder="ריאל מדריד - בית 2024/25"></div>
-        <div class="modal-row">
-          <div class="form-field"><label>קבוצה *</label><input id="m-team" type="text" placeholder="ריאל מדריד"></div>
-          <div class="form-field"><label>ליגה</label><input id="m-league" type="text" placeholder="לה ליגה"></div>
-        </div>
-        <div class="modal-row">
-          <div class="form-field"><label>מחיר ₪ *</label><input id="m-price" type="number" placeholder="189"></div>
-          <div class="form-field"><label>מלאי</label><input id="m-stock" type="number" placeholder="50" value="50"></div>
-        </div>
-        <div class="form-field">
-          <label>עונה / תקופה</label>
-          <select id="m-era" class="f-input" style="border-radius:var(--r);padding:.55rem .875rem">
-            <option value="2024/25 עונה נוכחית">2024/25 עכשווי</option>
-            <option value="שנות ה-2000">שנות ה-2000</option>
-            <option value="רטרו - שנות ה-90">רטרו שנות ה-90</option>
-            <option value="רטרו - שנות ה-80">רטרו שנות ה-80</option>
-            <option value="רטרו - שנות ה-70">רטרו שנות ה-70</option>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>תג מוצר</label>
-          <select id="m-badge" class="f-input" style="border-radius:var(--r);padding:.55rem .875rem">
-            <option value="">ללא</option>
-            <option value="הכי נמכר">הכי נמכר</option>
-            <option value="חדש">חדש</option>
-            <option value="רטרו">רטרו</option>
-            <option value="מבצע">מבצע</option>
-          </select>
-        </div>
-        <div class="form-field"><label>כתובת תמונה (URL)</label><input id="m-img" type="text" placeholder="https://..."></div>
-        <div class="form-field"><label>תיאור</label><textarea id="m-desc" rows="3" style="border:1px solid var(--border);border-radius:var(--r);padding:.625rem .75rem;font-size:.875rem;width:100%;resize:none;outline:none;font-family:inherit;text-align:right;background:var(--bg);color:var(--text)"></textarea></div>
-        <button class="btn-black" onclick="saveProd()" style="width:100%;padding:.875rem;font-size:.875rem;font-weight:700">שמור מוצר</button>
-      </div>
-    </div>
-  </div>
-</main>
 
 <div id="toast"></div>
 
@@ -1522,10 +1457,11 @@ function renderCheckout(){
 }
 function setPay(m){
   selPay=m;
-  ['card','paypal','bank'].forEach(k=>{
+  ['card','bit','bank','paypal'].forEach(k=>{
     document.getElementById('pm-'+k).style.display=m===k?'block':'none';
     document.getElementById('pb-'+k).className='pay-btn'+(m===k?' active':'');
   });
+  if(m==='bit'){const el=document.getElementById('bit-total');if(el)el.textContent='₪'+cartTotal();}
 }
 window.setPay=setPay;
 function fmtCard(inp){
