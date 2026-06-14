@@ -481,7 +481,7 @@ input,select,textarea{font-family:inherit}
         </div>
       </div>
       <div class="hero-visual">
-        <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&h=900&fit=crop&crop=top" alt="גופיות כדורגל">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgl0goqe0oPZcZubJbhNd9S767H9D34t1auC_IYMRusPxo4YANlZC-N1o9fOahbOFT-GR2yAOZtpvOvTjytHIRu3yT3g1enFCuIIfHnvvJDZ-b66-ZNh7Kk1oKF440htH8ydMrDUS3VrJENB-G3AHr7T3Xm6xygPtO7l9a1_EEQiRxALgoztHHOoaxZ-ole/s1600/Real%20Madrid%2024-25%20Home%20Kit%20Leaked%20%20%281%29.jpg" alt="גופיית ריאל מדריד">
         <div class="hero-visual-badge">
           <small>⭐ הכי נמכר השבוע</small>
           <strong>ריאל מדריד 2024/25</strong>
@@ -617,16 +617,116 @@ input,select,textarea{font-family:inherit}
 </main>
 
 <!-- MYSTERY PAGE -->
-<main id="page-mystery" class="page" style="padding-top:var(--nav-h);background:#0a0a0a;min-height:100vh">
-  <div style="max-width:1400px;margin:0 auto;padding:3rem 1.5rem 5rem">
-    <div style="margin-bottom:2.5rem">
-      <div class="mystery-eyebrow">Mystery Box</div>
-      <h1 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.1;margin-bottom:.75rem">בחר קטגוריה.<br><span style="color:var(--accent)">קבל הפתעה.</span></h1>
-      <p style="color:#555;font-size:.95rem;max-width:480px;line-height:1.7">הזמן Mystery Box וקבל גופייה אקראית מהקטגוריה שבחרת. לא יודע מה תקבל — זה כל הכיף.</p>
+<main id="page-mystery" class="page">
+  <!-- Hero -->
+  <div class="hero" style="background:var(--bg)">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-blob" aria-hidden="true"></div>
+        <span class="hero-eyebrow">Mystery Box · חדש</span>
+        <h1>לא יודע מה<br>לבחור?<br><em>נחליט בשבילך.</em></h1>
+        <p>בחר קטגוריה — ריאל מדריד או מכבי, רטרו או עכשווי — וקבל גופייה אקראית מהקטגוריה שבחרת.</p>
+        <div class="hero-actions">
+          <button class="btn-black" onclick="document.getElementById('mystery-boxes-section').scrollIntoView({behavior:'smooth'})">בחר קופסה ↓</button>
+          <button class="btn-outline" onclick="nav('store')">חנות הגופיות</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-num">6</div><div class="hero-stat-lbl">קטגוריות</div></div>
+          <div><div class="hero-stat-num">₪99</div><div class="hero-stat-lbl">החל מ</div></div>
+          <div><div class="hero-stat-num">30</div><div class="hero-stat-lbl">יום החזרה</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjqidxxeyzfct4iiTG6Qs_fPEiMOVmfd6rkOAgznwMG9nwGU5y4xKDx6dLoeus6ORbUDVsgqrQtJ7Fw9QK6YEDclvHWZTg-_ehMM0WSWzU_ZBX4FT4ywrEyhEz8tZtao2mkhI0roAdI8Bt357pVhwjgmSZmJ1z0WZu7b46w_bdI0ib_VfVvqQOkD8zM9gdd/s1600/argentina-2024-home-kit%20%282%29.jpg" alt="Mystery Box">
+        <div class="hero-visual-badge">
+          <small>📦 הפתעה מובטחת</small>
+          <strong>Mystery Box</strong>
+          <span>החל מ ₪99</span>
+        </div>
+      </div>
     </div>
-    <div class="mystery-grid" id="mystery-page-grid"></div>
-    <div style="margin-top:2.5rem;border-top:1px solid #1a1a1a;padding-top:2rem">
-      <p style="color:#333;font-size:.8rem;line-height:1.7">* הגופייה הספציפית שתקבל נבחרת אקראית מתוך הקטגוריה. ניתן לבחור מידה, שם ומספר בהמשך התהליך. ניתן לבקש החלפה תוך 30 יום.</p>
+  </div>
+
+  <!-- Box grid -->
+  <div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3.5rem 0" id="mystery-boxes-section">
+    <div class="section" style="padding-top:0;padding-bottom:0">
+      <div class="section-head"><h2>בחר את הקופסה שלך</h2><span style="font-size:.8rem;color:var(--text2)">6 קטגוריות</span></div>
+      <div class="mystery-grid" id="mystery-page-grid"></div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="why-section">
+    <div class="why-inner">
+      <div class="section-head" style="margin-bottom:1.5rem"><h2>איך זה עובד?</h2></div>
+      <div class="why-grid">
+        <div class="why-card"><div class="why-icon"><i class="fas fa-box-open"></i></div><h3>בחר קטגוריה</h3><p>ריאל מדריד, רטרו, נבחרות, ישראל — בחר את עולם הגופיות שאתה אוהב.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-ruler"></i></div><h3>בחר מידה ופרטים</h3><p>בחר מידה, הוסף שם ומספר — ואנחנו נדאג לשאר.</p></div>
+        <div class="why-card"><div class="why-icon"><i class="fas fa-gift"></i></div><h3>קבל הפתעה</h3><p>גופייה אקראית מהקטגוריה שבחרת מגיעה אליך — ניתן להחזיר תוך 30 יום.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">ג'רזי <em>קינג</em></div>
+      <div class="footer-tagline">חנות גופיות הכדורגל המובילה בישראל</div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 ג'רזי קינג. כל הזכויות שמורות.</span>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<!-- MYSTERY DETAIL PAGE -->
+<main id="page-mystery-detail" class="page" style="padding-top:var(--nav-h);background:var(--bg)">
+  <div class="pd-wrap">
+    <button class="pd-back" onclick="nav('mystery')"><i class="fas fa-arrow-right"></i> חזרה לקופסאות</button>
+    <div class="pd-grid">
+      <!-- Visual -->
+      <div class="pd-viewer">
+        <div class="viewer-wrap" id="mbd-visual" style="background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;padding:2rem">
+          <div id="mbd-kit-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%"></div>
+          <div style="font-size:4rem;font-weight:900;color:rgba(255,255,255,.08);position:absolute;pointer-events:none">?</div>
+        </div>
+        <p class="glb-note" style="margin-top:.75rem">הגופייה הספציפית נבחרת אקראית בעת ההזמנה.</p>
+      </div>
+      <!-- Info -->
+      <div>
+        <div class="pd-badges"><span class="badge-p-red" id="mbd-badge">Mystery Box</span><span class="badge-p-gray" id="mbd-cat"></span></div>
+        <h1 id="mbd-name" style="font-size:2rem;font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem"></h1>
+        <p id="mbd-price" style="font-size:2.4rem;font-weight:800;border-bottom:1px solid var(--border);padding-bottom:.875rem;margin-bottom:1rem"></p>
+        <p id="mbd-desc" style="font-size:.875rem;color:var(--text2);line-height:1.8;margin-bottom:1.5rem"></p>
+        <div style="margin-bottom:1.25rem">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em">מה יכול להיות בפנים?</div>
+          <div id="mbd-options" style="display:flex;flex-wrap:wrap;gap:.375rem"></div>
+        </div>
+        <div class="size-section" style="margin-bottom:1.5rem">
+          <div class="size-label"><span>בחר מידה</span><span id="mbd-sz-lbl">L נבחרה</span></div>
+          <div class="size-btns">
+            <button class="sz" onclick="mbPickSz(this,'S')">S</button>
+            <button class="sz" onclick="mbPickSz(this,'M')">M</button>
+            <button class="sz active" onclick="mbPickSz(this,'L')">L</button>
+            <button class="sz" onclick="mbPickSz(this,'XL')">XL</button>
+            <button class="sz" onclick="mbPickSz(this,'XXL')">XXL</button>
+          </div>
+        </div>
+        <div class="custom-section" style="margin-bottom:1.25rem">
+          <div class="custom-head"><h4>הדפסה אישית <span style="font-size:.65rem;color:var(--text2);background:var(--bg3);padding:.15rem .4rem;border-radius:4px">אופציונלי</span></h4></div>
+          <div class="custom-inputs">
+            <div><label>שם</label><input id="mbd-cname" type="text" placeholder="RONALDO" maxlength="12"></div>
+            <div><label>מספר</label><input id="mbd-cnum" type="text" placeholder="7" maxlength="3"></div>
+          </div>
+        </div>
+        <div class="pd-actions">
+          <button class="btn-black" onclick="confirmMysteryOrder()" style="padding:.9rem;font-size:.9rem;font-weight:700;width:100%">📦 הזמן Mystery Box</button>
+        </div>
+        <div class="pd-trust" style="border-top:1px solid var(--border);padding-top:1rem;margin-top:1.25rem;display:flex;gap:1rem;flex-wrap:wrap">
+          <span style="font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:.3rem"><i class="fas fa-rotate-left"></i> החזרה תוך 30 יום</span>
+          <span style="font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:.3rem"><i class="fas fa-truck"></i> משלוח מהיר</span>
+          <span style="font-size:.75rem;color:var(--text2);display:flex;align-items:center;gap:.3rem"><i class="fas fa-star"></i> גופייה מקורית מובטחת</span>
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -1109,7 +1209,7 @@ const MYSTERY_BOXES=[
 ];
 
 function mysteryCard(box){
-  return `<div class="mystery-card" style="--mc-btn:${box.btnColor}">
+  return `<div class="mystery-card" onclick="openMysteryDetail('${box.id}')" style="--mc-btn:${box.btnColor}">
     <div class="mystery-img-wrap">
       <img src="${box.repImg}" alt="${box.name}" loading="lazy" onerror="this.style.opacity='.15'">
       <div class="mystery-img-overlay"></div>
@@ -1126,7 +1226,7 @@ function mysteryCard(box){
       <div class="mystery-hint">${box.hint}</div>
       <div class="mystery-footer">
         <div class="mystery-price"><small>החל מ </small>₪${box.price}</div>
-        <button class="mystery-btn" style="background:${box.btnColor}" onclick="event.stopPropagation();addMysteryToCart('${box.id}')">הזמן קופסה 📦</button>
+        <button class="mystery-btn" style="background:${box.btnColor}" onclick="event.stopPropagation();openMysteryDetail('${box.id}')">בחר מידה ←</button>
       </div>
     </div>
   </div>`;
@@ -1140,6 +1240,50 @@ function renderMystery(){
   if(page)page.innerHTML=html;
 }
 
+let _curMbId=null, _mbSz='L';
+function openMysteryDetail(boxId){
+  const box=MYSTERY_BOXES.find(b=>b.id===boxId);
+  if(!box)return;
+  _curMbId=boxId; _mbSz='L';
+  document.getElementById('mbd-name').textContent=box.name;
+  document.getElementById('mbd-cat').textContent=box.badgeLbl;
+  document.getElementById('mbd-price').textContent='₪'+box.price;
+  document.getElementById('mbd-desc').textContent='הגופייה שתקבל נבחרת אקראית מתוך '+box.hint;
+  document.getElementById('mbd-sz-lbl').textContent='L נבחרה';
+  document.querySelectorAll('#page-mystery-detail .sz').forEach(b=>{b.classList.toggle('active',b.textContent==='L');});
+  document.getElementById('mbd-cname').value='';
+  document.getElementById('mbd-cnum').value='';
+  /* kit options pills */
+  const eligible=PRODS.filter(box.filter);
+  document.getElementById('mbd-options').innerHTML=eligible.map(p=>`<span style="font-size:.7rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-full);padding:.2rem .625rem;color:var(--text2)">${p.name}</span>`).join('');
+  /* kit photo grid */
+  const imgs=eligible.slice(0,4).map(p=>p.imageUrls?.front||p.img);
+  document.getElementById('mbd-kit-grid').innerHTML=imgs.map(u=>`<img src="${u}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);filter:brightness(.7) blur(2px)" loading="lazy">`).join('');
+  nav('mystery-detail');
+}
+window.openMysteryDetail=openMysteryDetail;
+function mbPickSz(btn,sz){
+  _mbSz=sz;
+  document.querySelectorAll('#page-mystery-detail .sz').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mbd-sz-lbl').textContent=sz+' נבחרה';
+}
+window.mbPickSz=mbPickSz;
+function confirmMysteryOrder(){
+  if(!_curMbId)return;
+  const box=MYSTERY_BOXES.find(b=>b.id===_curMbId);
+  const eligible=PRODS.filter(box.filter);
+  if(!eligible.length){toast('אין גופיות בקטגוריה זו');return;}
+  const picked=eligible[Math.floor(Math.random()*eligible.length)];
+  const cName=document.getElementById('mbd-cname').value.trim();
+  const cNum=document.getElementById('mbd-cnum').value.trim();
+  const key=`mystery|${_curMbId}|${Date.now()}`;
+  cart.push({_k:key,id:picked.id,name:`📦 ${box.name} → ${picked.name}`,price:box.price,img:picked.imageUrls?.front||picked.img,size:_mbSz,cName,cNum,qty:1});
+  saveCart();refreshCart();
+  toast(`🎁 נחשף! קיבלת: ${picked.name}${_mbSz?' · מידה '+_mbSz:''}`);
+  nav('store');
+}
+window.confirmMysteryOrder=confirmMysteryOrder;
 function addMysteryToCart(boxId){
   const box=MYSTERY_BOXES.find(b=>b.id===boxId);
   if(!box)return;
@@ -1189,6 +1333,7 @@ function nav(p){
   if(p==='home')renderFeatured();
   if(p==='store')renderStore();
   if(p==='mystery')renderMystery();
+  if(p==='mystery-detail'){}/*already populated by openMysteryDetail*/
   if(p==='checkout')renderCheckout();
   if(p==='admin'){renderAdminProds();loadOrders();}
   if(p==='product'){setTimeout(()=>{window._3dinit?.();window._3dready=true;},80);}
