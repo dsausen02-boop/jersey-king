@@ -213,6 +213,8 @@ input,select,textarea{font-family:inherit}
 .size-label span{color:var(--text2);font-weight:400}
 .size-btns{display:flex;gap:.375rem;flex-wrap:wrap}
 .sz{border:1px solid var(--border);border-radius:var(--r-full);padding:.45rem .875rem;font-size:.8rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all var(--ease)}
+.edition-btn{border:1px solid var(--border);border-radius:var(--r-full);padding:.5rem 1.1rem;font-size:.8rem;font-weight:700;cursor:pointer;background:var(--bg3);color:var(--text2);transition:all var(--ease)}
+.edition-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 .sz:hover{border-color:var(--text);color:var(--text)}.sz.active{background:var(--text);color:#fff;border-color:var(--text)}
 .custom-section{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.125rem;margin-bottom:1.25rem}
 .custom-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.875rem}
@@ -701,23 +703,27 @@ input,select,textarea{font-family:inherit}
           <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em">מה יכול להיות בפנים?</div>
           <div id="mbd-options" style="display:flex;flex-wrap:wrap;gap:.375rem"></div>
         </div>
-        <div class="size-section" style="margin-bottom:1.5rem">
-          <div class="size-label"><span>בחר מידה</span><span id="mbd-sz-lbl">L נבחרה</span></div>
-          <div class="size-btns">
-            <button class="sz" onclick="mbPickSz(this,'S')">S</button>
-            <button class="sz" onclick="mbPickSz(this,'M')">M</button>
-            <button class="sz active" onclick="mbPickSz(this,'L')">L</button>
-            <button class="sz" onclick="mbPickSz(this,'XL')">XL</button>
-            <button class="sz" onclick="mbPickSz(this,'XXL')">XXL</button>
+        <!-- Edition toggle -->
+        <div style="margin-bottom:1.5rem">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.625rem;text-transform:uppercase;letter-spacing:.05em">בחר מהדורה</div>
+          <div style="display:flex;gap:.5rem">
+            <button id="mbd-fan-btn" class="edition-btn active" onclick="mbSetEdition('fan',this)">⭐ מהדורת פן</button>
+            <button id="mbd-player-btn" class="edition-btn" onclick="mbSetEdition('player',this)">👕 מהדורת שחקן</button>
+          </div>
+          <p id="mbd-edition-desc" style="font-size:.75rem;color:var(--text2);margin-top:.5rem;line-height:1.6">גזרת פן רגילה — נוחה לכל יום</p>
+        </div>
+        <!-- How many people -->
+        <div style="margin-bottom:1.25rem">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.625rem;text-transform:uppercase;letter-spacing:.05em">כמה אנשים מזמינים?</div>
+          <div style="display:flex;align-items:center;gap:.875rem">
+            <button onclick="mbChangeCount(-1)" style="width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--border);background:var(--bg3);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">−</button>
+            <span id="mbd-count-lbl" style="font-size:1.4rem;font-weight:800;min-width:1.5rem;text-align:center">1</span>
+            <button onclick="mbChangeCount(1)" style="width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--border);background:var(--bg3);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
+            <span style="font-size:.8rem;color:var(--text2)">× ₪<span id="mbd-unit-price"></span> לאדם</span>
           </div>
         </div>
-        <div class="custom-section" style="margin-bottom:1.25rem">
-          <div class="custom-head"><h4>הדפסה אישית <span style="font-size:.65rem;color:var(--text2);background:var(--bg3);padding:.15rem .4rem;border-radius:4px">אופציונלי</span></h4></div>
-          <div class="custom-inputs">
-            <div><label>שם</label><input id="mbd-cname" type="text" placeholder="RONALDO" maxlength="12"></div>
-            <div><label>מספר</label><input id="mbd-cnum" type="text" placeholder="7" maxlength="3"></div>
-          </div>
-        </div>
+        <!-- Per-person size selectors (rendered dynamically) -->
+        <div id="mbd-persons-wrap" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem"></div>
         <div class="pd-actions">
           <button class="btn-black" onclick="confirmMysteryOrder()" style="padding:.9rem;font-size:.9rem;font-weight:700;width:100%">📦 הזמן Mystery Box</button>
         </div>
@@ -1240,47 +1246,88 @@ function renderMystery(){
   if(page)page.innerHTML=html;
 }
 
-let _curMbId=null, _mbSz='L';
+let _curMbId=null, _mbEdition='fan', _mbCount=1, _mbSizes=[];
+const MB_EDITION_DESC={fan:'גזרת פן רגילה — נוחה לכל יום',player:'גזרת שחקן צמודה — בד ביצועים מקצועי'};
 function openMysteryDetail(boxId){
   const box=MYSTERY_BOXES.find(b=>b.id===boxId);
   if(!box)return;
-  _curMbId=boxId; _mbSz='L';
+  _curMbId=boxId; _mbEdition='fan'; _mbCount=1; _mbSizes=['L'];
   document.getElementById('mbd-name').textContent=box.name;
   document.getElementById('mbd-cat').textContent=box.badgeLbl;
   document.getElementById('mbd-price').textContent='₪'+box.price;
+  document.getElementById('mbd-unit-price').textContent=box.price;
   document.getElementById('mbd-desc').textContent='הגופייה שתקבל נבחרת אקראית מתוך '+box.hint;
-  document.getElementById('mbd-sz-lbl').textContent='L נבחרה';
-  document.querySelectorAll('#page-mystery-detail .sz').forEach(b=>{b.classList.toggle('active',b.textContent==='L');});
-  document.getElementById('mbd-cname').value='';
-  document.getElementById('mbd-cnum').value='';
+  /* reset edition */
+  document.getElementById('mbd-fan-btn').classList.add('active');
+  document.getElementById('mbd-player-btn').classList.remove('active');
+  document.getElementById('mbd-edition-desc').textContent=MB_EDITION_DESC.fan;
+  /* reset count */
+  document.getElementById('mbd-count-lbl').textContent='1';
   /* kit options pills */
   const eligible=PRODS.filter(box.filter);
   document.getElementById('mbd-options').innerHTML=eligible.map(p=>`<span style="font-size:.7rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-full);padding:.2rem .625rem;color:var(--text2)">${p.name}</span>`).join('');
   /* kit photo grid */
   const imgs=eligible.slice(0,4).map(p=>p.imageUrls?.front||p.img);
   document.getElementById('mbd-kit-grid').innerHTML=imgs.map(u=>`<img src="${u}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);filter:brightness(.7) blur(2px)" loading="lazy">`).join('');
+  renderMbPersonRows();
   nav('mystery-detail');
 }
 window.openMysteryDetail=openMysteryDetail;
-function mbPickSz(btn,sz){
-  _mbSz=sz;
-  document.querySelectorAll('#page-mystery-detail .sz').forEach(b=>b.classList.remove('active'));
+
+function mbSetEdition(ed,btn){
+  _mbEdition=ed;
+  document.querySelectorAll('.edition-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('mbd-sz-lbl').textContent=sz+' נבחרה';
+  document.getElementById('mbd-edition-desc').textContent=MB_EDITION_DESC[ed];
 }
-window.mbPickSz=mbPickSz;
+window.mbSetEdition=mbSetEdition;
+
+function mbChangeCount(delta){
+  _mbCount=Math.min(10,Math.max(1,_mbCount+delta));
+  document.getElementById('mbd-count-lbl').textContent=_mbCount;
+  /* keep existing size choices, pad with 'L' for new slots */
+  _mbSizes.length=_mbCount;
+  for(let i=0;i<_mbCount;i++) if(!_mbSizes[i]) _mbSizes[i]='L';
+  renderMbPersonRows();
+}
+window.mbChangeCount=mbChangeCount;
+
+function renderMbPersonRows(){
+  const SIZES=['S','M','L','XL','XXL'];
+  const wrap=document.getElementById('mbd-persons-wrap');
+  wrap.innerHTML=Array.from({length:_mbCount},(_,i)=>`
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.875rem 1rem">
+      <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.5rem">אדם ${i+1}</div>
+      <div style="display:flex;gap:.375rem;flex-wrap:wrap">
+        ${SIZES.map(s=>`<button class="sz${_mbSizes[i]===s?' active':''}" onclick="mbPickPersonSz(${i},'${s}',this)">${s}</button>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function mbPickPersonSz(idx,sz,btn){
+  _mbSizes[idx]=sz;
+  const row=btn.closest('div[style]');
+  row.querySelectorAll('.sz').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+window.mbPickPersonSz=mbPickPersonSz;
+
 function confirmMysteryOrder(){
   if(!_curMbId)return;
   const box=MYSTERY_BOXES.find(b=>b.id===_curMbId);
   const eligible=PRODS.filter(box.filter);
   if(!eligible.length){toast('אין גופיות בקטגוריה זו');return;}
-  const picked=eligible[Math.floor(Math.random()*eligible.length)];
-  const cName=document.getElementById('mbd-cname').value.trim();
-  const cNum=document.getElementById('mbd-cnum').value.trim();
-  const key=`mystery|${_curMbId}|${Date.now()}`;
-  cart.push({_k:key,id:picked.id,name:`📦 ${box.name} → ${picked.name}`,price:box.price,img:picked.imageUrls?.front||picked.img,size:_mbSz,cName,cNum,qty:1});
+  const ts=Date.now();
+  _mbSizes.forEach((sz,i)=>{
+    const picked=eligible[Math.floor(Math.random()*eligible.length)];
+    const edLabel=_mbEdition==='player'?'שחקן':'פן';
+    cart.push({_k:`mystery|${_curMbId}|${ts}|${i}`,id:picked.id,
+      name:`📦 ${box.name} · ${edLabel} → ${picked.name}`,
+      price:box.price,img:picked.imageUrls?.front||picked.img,size:sz,cName:'',cNum:'',qty:1});
+  });
   saveCart();refreshCart();
-  toast(`🎁 נחשף! קיבלת: ${picked.name}${_mbSz?' · מידה '+_mbSz:''}`);
+  const edLabel=_mbEdition==='player'?'מהדורת שחקן':'מהדורת פן';
+  toast(`🎁 ${_mbCount} גופיות נוספו! ${edLabel}`);
   nav('store');
 }
 window.confirmMysteryOrder=confirmMysteryOrder;
