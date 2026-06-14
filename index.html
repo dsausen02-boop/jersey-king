@@ -771,6 +771,15 @@ input,select,textarea{font-family:inherit}
         <h1 id="pd-name"></h1>
         <p id="pd-team"><img id="pd-team-logo" src="" alt="" onerror="this.style.display='none'" style="display:none"></p>
         <p id="pd-league"></p><p id="pd-price"></p><p id="pd-desc"></p>
+        <!-- Edition toggle -->
+        <div style="margin-bottom:1.25rem">
+          <div style="font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:.625rem;text-transform:uppercase;letter-spacing:.05em">בחר מהדורה</div>
+          <div style="display:flex;gap:.5rem">
+            <button id="pd-fan-btn" class="edition-btn active" onclick="setEdition('fan',this)">⭐ מהדורת פן</button>
+            <button id="pd-player-btn" class="edition-btn" onclick="setEdition('player',this)">👕 מהדורת שחקן</button>
+          </div>
+          <p id="pd-edition-desc" style="font-size:.75rem;color:var(--text2);margin-top:.5rem;line-height:1.6">גזרת פן רגילה — נוחה לכל יום</p>
+        </div>
         <div class="size-section">
           <div class="size-label"><span>בחר מידה</span><span id="sz-chosen">L נבחרה</span></div>
           <div class="size-btns">
@@ -824,10 +833,26 @@ input,select,textarea{font-family:inherit}
     <div class="co-block">
       <h2>אמצעי תשלום</h2>
       <div class="pay-methods">
-        <button class="pay-btn active" id="pb-paypal" onclick="setPay('paypal')"><i class="fab fa-paypal"></i> PayPal</button>
+        <button class="pay-btn active" id="pb-card" onclick="setPay('card')"><i class="fas fa-credit-card"></i> כרטיס אשראי</button>
+        <button class="pay-btn" id="pb-paypal" onclick="setPay('paypal')"><i class="fab fa-paypal"></i> PayPal</button>
         <button class="pay-btn" id="pb-bank" onclick="setPay('bank')"><i class="fas fa-building-columns"></i> העברה בנקאית</button>
       </div>
-      <div id="pm-paypal">
+      <div id="pm-card">
+        <div class="form-grid" style="margin-top:1rem">
+          <div class="form-field full">
+            <label>מספר כרטיס</label>
+            <div style="position:relative">
+              <input id="cc-num" type="tel" inputmode="numeric" placeholder="0000 0000 0000 0000" maxlength="19" oninput="fmtCard(this)" style="padding-left:3rem">
+              <span id="cc-brand" style="position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--text2)"><i class="fas fa-credit-card"></i></span>
+            </div>
+          </div>
+          <div class="form-field"><label>תוקף (MM/YY)</label><input id="cc-exp" type="tel" inputmode="numeric" placeholder="MM/YY" maxlength="5" oninput="fmtExp(this)"></div>
+          <div class="form-field"><label>CVV</label><input id="cc-cvv" type="tel" inputmode="numeric" placeholder="123" maxlength="4"></div>
+          <div class="form-field full"><label>שם בעל הכרטיס</label><input id="cc-name" type="text" placeholder="ISRAEL ISRAELOV"></div>
+        </div>
+        <p style="font-size:.72rem;color:var(--text2);margin-top:.75rem;display:flex;align-items:center;gap:.4rem"><i class="fas fa-lock" style="color:#059669"></i> חיבור מוצפן SSL 256-bit · פרטי הכרטיס מאובטחים</p>
+      </div>
+      <div id="pm-paypal" style="display:none">
         <div class="paypal-wrap">
           <button class="paypal-btn" onclick="fakePaypal()">שלם עם PayPal</button>
           <p class="paypal-note">מאובטח על ידי PayPal · SSL 256-bit</p>
@@ -1338,7 +1363,7 @@ function addMysteryToCart(boxId){
 window.addMysteryToCart=addMysteryToCart;
 
 let cart=JSON.parse(localStorage.getItem('jk2_cart')||'[]');
-let curProd=null,selSz='L',selPay='paypal',editId=null;
+let curProd=null,selSz='L',selEdition='fan',selPay='card',editId=null;
 function saveCart(){localStorage.setItem('jk2_cart',JSON.stringify(cart));}
 function cartCount(){return cart.reduce((a,i)=>a+i.qty,0);}
 function cartTotal(){return cart.reduce((a,i)=>a+i.price*i.qty,0);}
@@ -1437,9 +1462,21 @@ function openProd(id){
   nav('product');
 }
 window.openProd=openProd;
-function pickSz(btn,sz){document.querySelectorAll('.sz').forEach(b=>b.classList.remove('active'));btn.classList.remove('active');void btn.offsetWidth;btn.classList.add('active');selSz=sz;document.getElementById('sz-chosen').textContent=sz+' נבחרה';}
+function pickSz(btn,sz){document.querySelectorAll('#page-product .sz').forEach(b=>b.classList.remove('active'));btn.classList.remove('active');void btn.offsetWidth;btn.classList.add('active');selSz=sz;document.getElementById('sz-chosen').textContent=sz+' נבחרה';}
+function setEdition(ed,btn){selEdition=ed;document.querySelectorAll('#page-product .edition-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('pd-edition-desc').textContent=ed==='player'?'גזרת שחקן צמודה — בד ביצועים מקצועי':'גזרת פן רגילה — נוחה לכל יום';}
+window.setEdition=setEdition;
 window.pickSz=pickSz;
-function addFromDetail(){if(!curProd)return;addToCart(curProd.id,selSz,document.getElementById('c-name')?.value||'',document.getElementById('c-num')?.value||'');const _b=document.querySelector('.pd-actions .btn-black');if(_b){_b.classList.remove('adding');void _b.offsetWidth;_b.classList.add('adding');setTimeout(()=>_b.classList.remove('adding'),400);}}
+function addFromDetail(){
+  if(!curProd)return;
+  const cName=document.getElementById('c-name')?.value||'';
+  const cNum=document.getElementById('c-num')?.value||'';
+  const edLabel=selEdition==='player'?' · מהדורת שחקן':' · מהדורת פן';
+  const key=`${curProd.id}|${selSz}|${selEdition}`;
+  const ex=cart.find(i=>i._k===key);
+  if(ex){ex.qty++;}else{cart.push({_k:key,id:curProd.id,name:curProd.name+edLabel,price:curProd.price,img:curProd.img,size:selSz,cName,cNum,qty:1});}
+  saveCart();refreshCart();
+  const _b=document.querySelector('.pd-actions .btn-black');if(_b){_b.classList.remove('adding');void _b.offsetWidth;_b.classList.add('adding');setTimeout(()=>_b.classList.remove('adding'),400);}
+}
 window.addFromDetail=addFromDetail;
 function pickThumb(i){
   document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));
@@ -1477,15 +1514,32 @@ function renderCheckout(){
   const t=document.getElementById('co-total');if(t)t.textContent='₪'+cartTotal();
   document.getElementById('order-success').style.display='none';
   document.getElementById('submit-btn').style.display='block';
+  setPay('card');
 }
 function setPay(m){
   selPay=m;
-  document.getElementById('pm-paypal').style.display=m==='paypal'?'block':'none';
-  document.getElementById('pm-bank').style.display=m==='bank'?'block':'none';
-  document.getElementById('pb-paypal').className='pay-btn'+(m==='paypal'?' active':'');
-  document.getElementById('pb-bank').className='pay-btn'+(m==='bank'?' active':'');
+  ['card','paypal','bank'].forEach(k=>{
+    document.getElementById('pm-'+k).style.display=m===k?'block':'none';
+    document.getElementById('pb-'+k).className='pay-btn'+(m===k?' active':'');
+  });
 }
 window.setPay=setPay;
+function fmtCard(inp){
+  let v=inp.value.replace(/\D/g,'').slice(0,16);
+  inp.value=v.replace(/(.{4})/g,'$1 ').trim();
+  const brand=document.getElementById('cc-brand');
+  if(!brand)return;
+  if(/^4/.test(v))brand.innerHTML='<i class="fab fa-cc-visa" style="color:#1a1f71"></i>';
+  else if(/^5[1-5]/.test(v)||/^2[2-7]/.test(v))brand.innerHTML='<i class="fab fa-cc-mastercard" style="color:#eb001b"></i>';
+  else brand.innerHTML='<i class="fas fa-credit-card"></i>';
+}
+window.fmtCard=fmtCard;
+function fmtExp(inp){
+  let v=inp.value.replace(/\D/g,'').slice(0,4);
+  if(v.length>=3)v=v.slice(0,2)+'/'+v.slice(2);
+  inp.value=v;
+}
+window.fmtExp=fmtExp;
 function fakePaypal(){toast('מעבד תשלום PayPal...');setTimeout(()=>toast('תשלום PayPal בוצע (הדגמה)'),1600);}
 window.fakePaypal=fakePaypal;
 function receiptPicked(inp){if(inp.files[0])document.getElementById('receipt-label').innerHTML=`<div style="color:#059669;font-size:1.25rem">✓</div><p style="font-size:.8rem;font-weight:600;margin-top:.375rem">${inp.files[0].name}</p>`;}
@@ -1497,6 +1551,13 @@ async function submitOrder(){
   const city=document.getElementById('s-city')?.value?.trim();
   if(!name||!phone||!addr||!city){toast('אנא מלא את כל שדות החובה');return;}
   if(!cart.length){toast('העגלה ריקה');return;}
+  if(selPay==='card'){
+    const ccNum=(document.getElementById('cc-num')?.value||'').replace(/\s/g,'');
+    const ccExp=document.getElementById('cc-exp')?.value||'';
+    const ccCvv=document.getElementById('cc-cvv')?.value||'';
+    const ccName=document.getElementById('cc-name')?.value?.trim()||'';
+    if(ccNum.length<15||ccExp.length<5||ccCvv.length<3||!ccName){toast('אנא מלא את פרטי כרטיס האשראי');return;}
+  }
   const oid='JK-'+Date.now().toString().slice(-7);
   const order={order_id:oid,customer_name:name,phone,address:addr+', '+city,city,total:cartTotal(),payment_method:selPay,items:cart,notes:document.getElementById('o-notes')?.value||'',status:'חדש',created_at:new Date().toISOString()};
   if(sb){try{await sb.from('orders').insert([order]);}catch(e){console.warn('Supabase:',e);}}
