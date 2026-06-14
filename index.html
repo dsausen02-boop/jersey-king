@@ -36,7 +36,7 @@ input,select,textarea{font-family:inherit}
 /* NAV */
 .nav{position:fixed;top:0;inset-inline:0;z-index:100;height:var(--nav-h);background:rgba(255,255,255,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;gap:1rem}
-.nav-logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap;cursor:pointer}
+.nav-logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap;cursor:pointer;user-select:none}
 .nav-logo em{font-style:normal;color:var(--accent)}
 .nav-links{display:flex;gap:.125rem;flex:1;justify-content:center}
 .nav-links a{font-size:.875rem;font-weight:500;color:var(--text2);padding:.4rem .875rem;border-radius:var(--r-full);transition:color var(--ease),background var(--ease);cursor:pointer}
@@ -387,24 +387,23 @@ input,select,textarea{font-family:inherit}
 .mystery-section-head h2{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;color:#fff}
 .mystery-section-head p{font-size:.8rem;color:#555;margin-top:.25rem}
 .mystery-eyebrow{font-size:.65rem;font-weight:700;color:#d97706;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.625rem}
-.mystery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#1a1a1a;border:1px solid #1a1a1a;border-radius:var(--r-lg);overflow:hidden}
+.mystery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
 @media(max-width:900px){.mystery-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:520px){.mystery-grid{grid-template-columns:1fr}}
-.mystery-card{background:#111;cursor:pointer;display:flex;flex-direction:column;transition:background .2s ease;position:relative;overflow:hidden}
-.mystery-card:hover{background:#161616}
-.mystery-img-wrap{position:relative;height:200px;overflow:hidden;flex-shrink:0}
-.mystery-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(.7) brightness(.55);transition:transform .4s ease,filter .4s ease}
-.mystery-card:hover .mystery-img-wrap img{transform:scale(1.06);filter:saturate(.85) brightness(.65)}
-.mystery-img-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.2) 0%,rgba(17,17,17,.9) 100%)}
-.mystery-img-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
-.mystery-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .55rem;border-radius:var(--r-full)}
-.mystery-qmark{font-size:4rem;font-weight:900;color:rgba(255,255,255,.18);line-height:1;letter-spacing:-.04em;font-family:'Rubik',sans-serif}
-.mystery-name{font-size:1rem;font-weight:700;color:#fff;letter-spacing:-.01em}
-.mystery-hint{font-size:.75rem;color:#555;line-height:1.5}
-.mystery-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:.875rem;border-top:1px solid #1f1f1f}
-.mystery-price{font-size:1.1rem;font-weight:800;color:#fff}
-.mystery-price small{font-size:.7rem;font-weight:400;color:#555;margin-right:.25rem}
-.mystery-btn{background:var(--mc-btn,#c8102e);color:#fff;padding:.45rem 1rem;border-radius:var(--r-full);font-size:.775rem;font-weight:700;transition:opacity .2s ease;border:none;cursor:pointer}
+.mystery-card{background:var(--bg);cursor:pointer;display:flex;flex-direction:column;transition:background var(--ease),transform .22s ease,box-shadow .22s ease;position:relative;overflow:hidden;z-index:0}
+.mystery-card:hover{background:var(--bg2);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.05);z-index:1}
+.mystery-img-wrap{position:relative;overflow:hidden;aspect-ratio:1;background:var(--bg3);flex-shrink:0}
+.mystery-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .35s ease}
+.mystery-card:hover .mystery-img-wrap img{transform:scale(1.05)}
+.mystery-img-badge{position:absolute;top:.625rem;right:.625rem}
+.mystery-lock{position:absolute;bottom:.625rem;left:50%;transform:translateX(-50%);width:2.25rem;height:2.25rem;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem}
+.mystery-name{font-size:.875rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.375rem}
+.mystery-hint{font-size:.72rem;color:var(--text2);line-height:1.5;margin-bottom:auto}
+.mystery-footer{display:flex;justify-content:space-between;align-items:center;padding-top:.75rem;border-top:1px solid var(--border);margin-top:.75rem}
+.mystery-price{font-size:.95rem;font-weight:800;color:var(--text)}
+.mystery-price small{font-size:.7rem;font-weight:400;color:var(--text2);margin-right:.2rem}
+.mystery-btn{background:var(--text);color:var(--bg);padding:.4rem .875rem;border-radius:var(--r-full);font-size:.75rem;font-weight:700;transition:opacity .2s ease;border:none;cursor:pointer}
+.mystery-btn:hover{opacity:.8}
 .mystery-btn:hover{opacity:.85}
 /* store page mystery strip */
 .mystery-strip{background:#0d0d0d;border-bottom:1px solid #1a1a1a;padding:1.25rem 0}
@@ -1215,24 +1214,18 @@ const MYSTERY_BOXES=[
 ];
 
 function mysteryCard(box){
-  return `<div class="mystery-card" onclick="openMysteryDetail('${box.id}')" style="--mc-btn:${box.btnColor}">
+  return `<div class="mystery-card" onclick="openMysteryDetail('${box.id}')">
     <div class="mystery-img-wrap">
       <img src="${box.repImg}" alt="${box.name}" loading="lazy" onerror="this.style.opacity='.15'">
-      <div class="mystery-img-overlay"></div>
-      <div class="mystery-img-content">
-        <span class="mystery-badge" style="background:rgba(0,0,0,.5);color:#fff;border:1px solid rgba(255,255,255,.15)">${box.badgeLbl}</span>
-        <div class="mystery-qmark">?</div>
-      </div>
+      <div class="mystery-img-badge"><span class="badge-hot" style="font-size:.6rem">${box.badgeLbl}</span></div>
+      <div class="mystery-lock"><i class="fas fa-lock"></i></div>
     </div>
-    <div style="padding:1.25rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:.625rem;flex:1">
-      <div style="display:flex;align-items:center;gap:.5rem">
-        <span style="font-size:1.25rem">${box.icon}</span>
-        <span class="mystery-name">${box.name}</span>
-      </div>
+    <div style="padding:1rem 1.125rem 1.25rem;display:flex;flex-direction:column;flex:1">
+      <div class="mystery-name">${box.name}</div>
       <div class="mystery-hint">${box.hint}</div>
       <div class="mystery-footer">
         <div class="mystery-price"><small>החל מ </small>₪${box.price}</div>
-        <button class="mystery-btn" style="background:${box.btnColor}" onclick="event.stopPropagation();openMysteryDetail('${box.id}')">בחר מידה ←</button>
+        <button class="mystery-btn" onclick="event.stopPropagation();openMysteryDetail('${box.id}')">בחר ←</button>
       </div>
     </div>
   </div>`;
