@@ -822,39 +822,16 @@ function disposeCard() {
   card = null;
 }
 
-/* ── T-shirt silhouette shape ── */
-function makeShirtShape() {
-  const s = new THREE.Shape();
-  s.moveTo(-0.44, -0.72);
-  s.lineTo( 0.44, -0.72);
-  s.lineTo( 0.44,  0.16);
-  s.lineTo( 0.68,  0.16);
-  s.lineTo( 0.72,  0.54);
-  s.lineTo( 0.36,  0.68);
-  s.quadraticCurveTo( 0.16, 0.72,  0.10, 0.64);
-  s.quadraticCurveTo( 0.05, 0.50,  0.00, 0.50);
-  s.quadraticCurveTo(-0.05, 0.50, -0.10, 0.64);
-  s.quadraticCurveTo(-0.16, 0.72, -0.36, 0.68);
-  s.lineTo(-0.72,  0.54);
-  s.lineTo(-0.68,  0.16);
-  s.lineTo(-0.44,  0.16);
-  s.closePath();
-  return s;
-}
-
-/* ── build Shirt (ExtrudeGeometry) ── */
-/* ExtrudeGeometry groups: 0=front-cap, 1=back-cap, 2=sides */
+/* ── build Depth Card ── */
+/* Three.js BoxGeometry face order: [+X, -X, +Y, -Y, +Z(front), -Z(back)] */
 function buildCard(fTex, bTex, edgeColor) {
   disposeCard();
   const edgeHex = parseInt((edgeColor || '#222222').replace('#', ''), 16);
   const edgeMat  = new THREE.MeshStandardMaterial({ color: edgeHex, roughness: 0.88, metalness: 0.06 });
-  const frontMat = new THREE.MeshStandardMaterial({ map: fTex, roughness: 0.22, metalness: 0.04, side: THREE.FrontSide });
-  const backMat  = new THREE.MeshStandardMaterial({ map: bTex, roughness: 0.22, metalness: 0.04, side: THREE.FrontSide });
-  const geo = new THREE.ExtrudeGeometry(makeShirtShape(), { depth: 0.05, bevelEnabled: false });
-  /* group 0 = front cap (faces -Z, away from camera), group 1 = back cap (faces +Z, toward camera) */
-  /* group1 faces +Z (toward camera) → jersey front; group0 faces -Z (away) → jersey back */
-  card = new THREE.Mesh(geo, [backMat, frontMat, edgeMat]);
-  card.position.z = -0.025;
+  const frontMat = new THREE.MeshStandardMaterial({ map: fTex, roughness: 0.22, metalness: 0.04 });
+  const backMat  = new THREE.MeshStandardMaterial({ map: bTex,  roughness: 0.22, metalness: 0.04 });
+  const geo = new THREE.BoxGeometry(1.28, 1.68, 0.09);
+  card = new THREE.Mesh(geo, [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, backMat]);
   card.castShadow = true;
   scene.add(card);
 }
@@ -942,21 +919,19 @@ window.applyTeam = (color, logoUrl, imageUrls) => {
   _doApply({ color, imageUrls });
 };
 
-/* jColor — live edge color update (material[2] = sides in ExtrudeGeometry) */
+/* jColor — live edge color update on the Depth Card (faces 0-3 are edges) */
 window.jColor = (hex) => {
   if (!card) return;
   const c = parseInt(hex.replace('#', ''), 16);
-  card.material[2].color.setHex(c);
-  card.material[2].needsUpdate = true;
+  card.material.slice(0, 4).forEach(m => { m.color.setHex(c); m.needsUpdate = true; });
 };
 window.jText = () => {};
 
-/* setFace — swap texture on shirt (faceIndex 4→front cap 0, 5→back cap 1) */
+/* setFace — swap a single face texture in-place (4=front, 5=back) */
 window.setFace = (faceIndex, url, fallbackColor) => {
   if (!card) return;
-  const matIdx = faceIndex === 5 ? 0 : 1; /* 5=back→group0, 4=front→group1 */
-  const mat = card.material[matIdx];
-  const label = matIdx === 1 ? '▶ FRONT' : '◀ BACK';
+  const mat = card.material[faceIndex];
+  const label = faceIndex === 4 ? '▶ FRONT' : '◀ BACK';
   loadTex(url, fallbackColor, label, tex => {
     if (mat.map) mat.map.dispose();
     mat.map = tex; mat.needsUpdate = true;
