@@ -5,7 +5,13 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ג'רזי קינג — חנות גופיות כדורגל</title>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="מעל 500 גופיות כדורגל קלאסיות ומודרניות עם הדפסה אישית. ריאל מדריד, ברצלונה, מכבי תל אביב ועוד. משלוח מהיר לכל הארץ.">
+<meta property="og:title" content="ג'רזי קינג — חנות גופיות כדורגל">
+<meta property="og:description" content="מעל 500 גופיות כדורגל קלאסיות ומודרניות עם הדפסה אישית. משלוח מהיר לכל הארץ.">
+<meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgl0goqe0oPZcZubJbhNd9S767H9D34t1auC_IYMRusPxo4YANlZC-N1o9fOahbOFT-GR2yAOZtpvOvTjytHIRu3yT3g1enFCuIIfHnvvJDZ-b66-ZNh7Kk1oKF440htH8ydMrDUS3VrJENB-G3AHr7T3Xm6xygPtO7l9a1_EEQiRxALgoztHHOoaxZ-ole/s1600/Real%20Madrid%2024-25%20Home%20Kit%20Leaked%20%20%281%29.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="importmap">
@@ -22,7 +28,7 @@
 :root{
   --bg:#ffffff;--bg2:#fafafa;--bg3:#f5f5f5;
   --border:#e5e5e5;--border2:#d4d4d4;
-  --text:#171717;--text2:#737373;--text3:#a3a3a3;
+  --text:#171717;--text2:#595959;--text3:#8a8a8a;
   --accent:#c8102e;--accent2:#a50d25;
   --nav-h:60px;--r:8px;--r-lg:12px;--r-full:9999px;--ease:.2s ease;
 }
@@ -58,7 +64,7 @@ input,select,textarea{font-family:inherit}
 /* CART DRAWER */
 .cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:200}
 .cart-overlay.open{display:block}
-.cart-drawer{position:fixed;top:0;bottom:0;left:0;right:auto;width:100%;max-width:390px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-right:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .3s ease}
+.cart-drawer{position:fixed;top:0;bottom:0;right:0;left:auto;width:100%;max-width:390px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s ease}
 .cart-drawer.open{transform:translateX(0)}
 .cart-head{padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
 .cart-head h2{font-size:1rem;font-weight:700}
@@ -196,6 +202,7 @@ input,select,textarea{font-family:inherit}
 .color-swatches{position:absolute;top:.75rem;left:.75rem;display:flex;gap:.35rem;flex-wrap:wrap;max-width:120px}
 .swatch{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .15s,border-color .15s}
 .swatch:hover{transform:scale(1.2);border-color:var(--text)}
+.swatch.active{border-color:var(--text);transform:scale(1.15);box-shadow:0 0 0 3px rgba(0,0,0,.12)}
 .glb-note{margin-top:.625rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.5rem .75rem;font-size:.75rem;color:var(--text2)}
 .thumbs{display:flex;gap:.5rem;margin-top:.75rem}
 .thumb{width:64px;height:64px;border-radius:var(--r);object-fit:cover;border:1px solid var(--border);cursor:pointer;transition:border-color var(--ease);background:var(--bg3)}
@@ -326,8 +333,22 @@ input,select,textarea{font-family:inherit}
 .kit-btn:hover{border-color:var(--border2);color:var(--text)}
 .kit-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
 
+/* WISHLIST */
+.wish-btn{position:absolute;top:.625rem;left:.625rem;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.88);backdrop-filter:blur(4px);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--text2);transition:all var(--ease);z-index:2}
+.wish-btn:hover{border-color:var(--accent);color:var(--accent);background:#fff}
+.wish-btn.wishlisted{color:var(--accent);border-color:var(--accent);background:#fff0f2}
+/* RECENTLY VIEWED */
+.rv-strip{border-top:1px solid var(--border);padding:1.5rem 0}
+.rv-strip-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem}
+.rv-strip h3{font-size:.875rem;font-weight:700;margin-bottom:1rem;color:var(--text2)}
+.rv-row{display:flex;gap:.625rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none}
+.rv-row::-webkit-scrollbar{display:none}
+.rv-item{flex-shrink:0;width:90px;cursor:pointer}
+.rv-item img{width:90px;height:90px;object-fit:cover;border-radius:var(--r);border:1px solid var(--border);transition:border-color var(--ease)}
+.rv-item:hover img{border-color:var(--text)}
+.rv-item p{font-size:.65rem;color:var(--text2);margin-top:.3rem;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* TOAST */
-#toast{display:none;position:fixed;bottom:1.5rem;left:1.5rem;z-index:500;background:var(--text);color:#fff;padding:.7rem 1.125rem;border-radius:var(--r-full);font-size:.8rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);max-width:280px}
+#toast{display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:500;background:var(--text);color:#fff;padding:.7rem 1.125rem;border-radius:var(--r-full);font-size:.8rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,.15);max-width:280px}
 
 /* ── VISUAL POLISH ── */
 
@@ -385,6 +406,60 @@ input,select,textarea{font-family:inherit}
   .prod-info{padding:.625rem .75rem .75rem}
 }
 
+/* ── PREMIUM UPGRADE ── */
+
+/* Warmer palette */
+:root{--bg2:#f8f8f7;--bg3:#f2f2f0;--border:#e6e6e4;--border2:#d0d0ce;--text:#111110;--text2:#68686a}
+
+/* Editorial serif headline */
+.hero-content h1,.retro-banner h2{font-family:'DM Serif Display',Georgia,serif;font-weight:400!important;letter-spacing:-.01em!important}
+.hero-content h1{font-size:clamp(2.8rem,5vw,4.4rem)!important}
+.retro-banner h2{font-size:2.6rem!important}
+
+/* Red accent underline on hero em */
+.hero-content h1 em{position:relative;display:inline-block}
+.hero-content h1 em::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent);border-radius:2px;opacity:.7}
+
+/* Nav — subtle shadow */
+.nav{box-shadow:0 1px 0 var(--border),0 2px 16px rgba(0,0,0,.04)}
+.nav-logo{font-size:1.05rem!important;letter-spacing:-.03em}
+
+/* Grid border-radius bump */
+.prod-grid,.cats-grid,.why-grid,.mystery-grid{border-radius:16px!important}
+
+/* Deeper card hover shadows */
+.prod-card:hover{box-shadow:0 20px 48px rgba(0,0,0,.1),0 4px 12px rgba(0,0,0,.06)!important}
+.cat-card:hover{box-shadow:0 12px 32px rgba(0,0,0,.08)!important}
+.mystery-card:hover{box-shadow:0 12px 32px rgba(0,0,0,.08)!important}
+
+/* Section heads — larger, tighter */
+.section-head h2{font-size:1.5rem!important;letter-spacing:-.035em!important}
+
+/* Why icons — brand red tint */
+.why-icon{background:#fff0f2!important;border-color:#fecdd3!important;color:var(--accent)!important;width:40px!important;height:40px!important;font-size:1rem!important}
+.why-card h3{font-size:1rem!important}
+.why-card{padding:2rem!important}
+
+/* Hero stats bolder */
+.hero-stat-num{font-size:2rem!important;font-weight:900!important}
+.hero-stats{margin-top:3.5rem!important}
+
+/* Hero visual badge — refined */
+.hero-visual-badge{border-radius:14px!important;padding:1rem 1.25rem!important;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+
+/* Product card — subtle bottom gradient on image */
+.prod-img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.04) 0%,transparent 40%);pointer-events:none;z-index:1}
+
+/* Checkout blocks — rounder */
+.co-block{border-radius:16px!important}
+.co-wrap h1{font-size:1.6rem!important;letter-spacing:-.035em!important}
+
+/* Footer logo */
+.footer-logo{font-size:1.1rem!important;letter-spacing:-.02em}
+
+/* Toast — softer shadow */
+#toast{box-shadow:0 8px 32px rgba(0,0,0,.18),0 2px 8px rgba(0,0,0,.1)!important;font-size:.825rem!important;padding:.8rem 1.25rem!important}
+
 /* ── MYSTERY BOX ── */
 .mystery-section{background:#0a0a0a;padding:4rem 1.5rem;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a}
 .mystery-section-inner{max-width:1400px;margin:0 auto}
@@ -409,7 +484,6 @@ input,select,textarea{font-family:inherit}
 .mystery-price small{font-size:.7rem;font-weight:400;color:var(--text2);margin-right:.2rem}
 .mystery-btn{background:var(--text);color:var(--bg);padding:.4rem .875rem;border-radius:var(--r-full);font-size:.75rem;font-weight:700;transition:opacity .2s ease;border:none;cursor:pointer}
 .mystery-btn:hover{opacity:.8}
-.mystery-btn:hover{opacity:.85}
 /* store page mystery strip */
 .mystery-strip{background:#0d0d0d;border-bottom:1px solid #1a1a1a;padding:1.25rem 0}
 .mystery-strip-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -612,6 +686,12 @@ input,select,textarea{font-family:inherit}
       </div>
     </div>
   </div>
+  <div id="rv-strip-wrap" class="rv-strip" style="display:none">
+    <div class="rv-strip-inner">
+      <h3>צפית לאחרונה</h3>
+      <div class="rv-row" id="rv-row"></div>
+    </div>
+  </div>
   <div class="store-body">
     <div id="store-grid" class="prod-grid"></div>
     <div id="store-empty" class="empty-state" style="display:none">
@@ -748,14 +828,14 @@ input,select,textarea{font-family:inherit}
         <div class="viewer-wrap">
           <canvas id="jersey-canvas"></canvas>
           <div class="color-swatches">
-            <button class="swatch" style="background:#fff;border:2px solid #ddd" onclick="jColor('#ffffff')" title="לבן"></button>
-            <button class="swatch" style="background:#c8102e" onclick="jColor('#c8102e')" title="אדום"></button>
-            <button class="swatch" style="background:#1a3a8f" onclick="jColor('#1a3a8f')" title="כחול"></button>
-            <button class="swatch" style="background:#0a1222" onclick="jColor('#0a1222')" title="נייבי"></button>
-            <button class="swatch" style="background:#1a7a1a" onclick="jColor('#1a7a1a')" title="ירוק"></button>
-            <button class="swatch" style="background:#111" onclick="jColor('#111111')" title="שחור"></button>
-            <button class="swatch" style="background:#f59e0b" onclick="jColor('#f59e0b')" title="צהוב"></button>
-            <button class="swatch" style="background:#6b21a8" onclick="jColor('#6b21a8')" title="סגול"></button>
+            <button class="swatch" style="background:#fff;border:2px solid #ddd" onclick="jColor('#ffffff',this)" title="לבן"></button>
+            <button class="swatch" style="background:#c8102e" onclick="jColor('#c8102e',this)" title="אדום"></button>
+            <button class="swatch" style="background:#1a3a8f" onclick="jColor('#1a3a8f',this)" title="כחול"></button>
+            <button class="swatch" style="background:#0a1222" onclick="jColor('#0a1222',this)" title="נייבי"></button>
+            <button class="swatch" style="background:#1a7a1a" onclick="jColor('#1a7a1a',this)" title="ירוק"></button>
+            <button class="swatch" style="background:#111" onclick="jColor('#111111',this)" title="שחור"></button>
+            <button class="swatch" style="background:#f59e0b" onclick="jColor('#f59e0b',this)" title="צהוב"></button>
+            <button class="swatch" style="background:#6b21a8" onclick="jColor('#6b21a8',this)" title="סגול"></button>
           </div>
           <div class="viewer-hint">גרור לסיבוב · גלגל לזום</div>
         </div>
@@ -784,7 +864,7 @@ input,select,textarea{font-family:inherit}
           <p id="pd-edition-desc" style="font-size:.75rem;color:var(--text2);margin-top:.5rem;line-height:1.6">גזרת פן רגילה — נוחה לכל יום</p>
         </div>
         <div class="size-section">
-          <div class="size-label"><span>בחר מידה</span><span id="sz-chosen">L נבחרה</span></div>
+          <div class="size-label"><span>בחר מידה</span><span style="display:flex;align-items:center;gap:.75rem"><button onclick="document.getElementById('size-guide-modal').classList.add('open')" style="font-size:.72rem;color:var(--text2);text-decoration:underline;background:none;border:none;cursor:pointer;font-family:inherit;padding:0">מדריך מידות</button><span id="sz-chosen">L נבחרה</span></span></div>
           <div class="size-btns">
             <button class="sz" onclick="pickSz(this,'S')">S</button>
             <button class="sz" onclick="pickSz(this,'M')">M</button>
@@ -803,6 +883,7 @@ input,select,textarea{font-family:inherit}
         <div class="pd-actions">
           <button class="btn-black" onclick="addFromDetail()">הוסף לעגלה</button>
           <button class="btn-outline" onclick="addFromDetail();nav('checkout')">קנה עכשיו</button>
+          <button onclick="orderWhatsApp()" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.9rem;font-size:.9rem;font-weight:700;border-radius:var(--r-full);background:#25D366;color:#fff;border:none;cursor:pointer;transition:opacity .2s ease" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'"><i class="fab fa-whatsapp" style="font-size:1.1rem"></i> הזמן דרך WhatsApp</button>
         </div>
         <div class="pd-trust">
           <span><i class="fas fa-check-circle" style="color:var(--accent)"></i> משלוח מהיר</span>
@@ -910,6 +991,35 @@ input,select,textarea{font-family:inherit}
 <!-- ADMIN -->
 
 <div id="toast"></div>
+
+<!-- SIZE GUIDE MODAL -->
+<div class="modal-bg" id="size-guide-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <h2>מדריך מידות גופיות</h2>
+      <button class="modal-close-btn" onclick="document.getElementById('size-guide-modal').classList.remove('open')"><i class="fas fa-xmark"></i></button>
+    </div>
+    <p style="font-size:.8rem;color:var(--text2);margin-bottom:1rem;line-height:1.6">מדידות בסנטימטרים. מדוד את החזה הרחב ביותר ואת הגובה עם נעליים.</p>
+    <table style="width:100%;border-collapse:collapse;font-size:.8rem;text-align:center">
+      <thead>
+        <tr style="background:var(--bg3);border-bottom:2px solid var(--border)">
+          <th style="padding:.6rem .75rem;font-weight:700;text-align:right">מידה</th>
+          <th style="padding:.6rem .75rem;font-weight:700">חזה (ס"מ)</th>
+          <th style="padding:.6rem .75rem;font-weight:700">גובה מומלץ</th>
+          <th style="padding:.6rem .75rem;font-weight:700">משקל מומלץ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem .75rem;font-weight:700;text-align:right">S</td><td>86–91</td><td>160–168 ס"מ</td><td>55–65 ק"ג</td></tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)"><td style="padding:.55rem .75rem;font-weight:700;text-align:right">M</td><td>92–97</td><td>168–175 ס"מ</td><td>65–75 ק"ג</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:.55rem .75rem;font-weight:700;text-align:right">L</td><td>98–104</td><td>175–182 ס"מ</td><td>75–85 ק"ג</td></tr>
+        <tr style="border-bottom:1px solid var(--border);background:var(--bg2)"><td style="padding:.55rem .75rem;font-weight:700;text-align:right">XL</td><td>105–112</td><td>182–188 ס"מ</td><td>85–100 ק"ג</td></tr>
+        <tr><td style="padding:.55rem .75rem;font-weight:700;text-align:right">XXL</td><td>113–120</td><td>188+ ס"מ</td><td>100+ ק"ג</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:.75rem;color:var(--text2);margin-top:1rem;line-height:1.6">💡 <strong>טיפ:</strong> מהדורת שחקן (Player Edition) צמודה יותר — שקלו לבחור מידה גדולה יותר ממה שאתם לובשים בדרך כלל.</p>
+  </div>
+</div>
 
 <!-- THREE.JS — BoxGeometry Depth Card (r160) -->
 <script type="module">
@@ -1068,10 +1178,15 @@ window.applyTeam = (color, logoUrl, imageUrls) => {
 };
 
 /* jColor — live edge color update on the Depth Card (faces 0-3 are edges) */
-window.jColor = (hex) => {
-  if (!card) return;
-  const c = parseInt(hex.replace('#', ''), 16);
-  card.material.slice(0, 4).forEach(m => { m.color.setHex(c); m.needsUpdate = true; });
+window.jColor = (hex, btn) => {
+  if (card) {
+    const c = parseInt(hex.replace('#', ''), 16);
+    card.material.slice(0, 4).forEach(m => { m.color.setHex(c); m.needsUpdate = true; });
+  }
+  if (btn) {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+  }
 };
 window.jText = () => {};
 
@@ -1306,6 +1421,20 @@ function addMysteryToCart(boxId){
 window.addMysteryToCart=addMysteryToCart;
 
 let cart=JSON.parse(localStorage.getItem('jk2_cart')||'[]');
+let wishlist=new Set(JSON.parse(localStorage.getItem('jk2_wish')||'[]'));
+let recentlyViewed=JSON.parse(localStorage.getItem('jk2_rv')||'[]');
+function saveWish(){localStorage.setItem('jk2_wish',JSON.stringify([...wishlist]));}
+function toggleWish(id,btn,e){e.stopPropagation();if(wishlist.has(id)){wishlist.delete(id);btn.classList.remove('wishlisted');btn.title='הוסף למועדפים';}else{wishlist.add(id);btn.classList.add('wishlisted');btn.title='הסר ממועדפים';toast('❤️ נוסף למועדפים');}saveWish();}
+window.toggleWish=toggleWish;
+function trackViewed(id){recentlyViewed=recentlyViewed.filter(x=>x!==id);recentlyViewed.unshift(id);if(recentlyViewed.length>8)recentlyViewed.length=8;localStorage.setItem('jk2_rv',JSON.stringify(recentlyViewed));}
+function renderRecentlyViewed(){
+  const wrap=document.getElementById('rv-strip-wrap');const row=document.getElementById('rv-row');
+  if(!wrap||!row)return;
+  const items=recentlyViewed.map(id=>PRODS.find(p=>p.id===id)).filter(Boolean);
+  if(!items.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  row.innerHTML=items.map(p=>`<div class="rv-item" onclick="openProd(${p.id})"><img src="${p.imageUrls?.front||p.img}" alt="${p.name}" loading="lazy"><p>${p.name}</p></div>`).join('');
+}
 let curProd=null,selSz='L',selEdition='fan',selPay='card',editId=null;
 function saveCart(){localStorage.setItem('jk2_cart',JSON.stringify(cart));}
 function cartCount(){return cart.reduce((a,i)=>a+i.qty,0);}
@@ -1355,11 +1484,24 @@ function badgeClass(b){return b==='הכי נמכר'?'badge-hot':b==='רטרו'?'
 function prodCard(p){
   const badge=p.badge?`<span class="prod-badge ${badgeClass(p.badge)}">${p.badge}</span>`:'';
   const logoImg=p.logo?`<img class="prod-team-logo" src="${p.logo}" alt="" onerror="this.style.display='none'" loading="lazy">`:'';
-  return `<div class="prod-card" onclick="openProd(${p.id})"><div class="prod-img-wrap"><img src="${p.imageUrls?.front||p.img}" alt="${p.name}" loading="lazy">${badge}</div><div class="prod-info"><div class="prod-team">${logoImg}${p.team}</div><div class="prod-name">${p.name}</div><div class="prod-footer"><span class="prod-price">₪${p.price}</span><button class="prod-add-btn" onclick="event.stopPropagation();addToCart(${p.id},'M')" aria-label="הוסף לעגלה"><i class="fas fa-plus"></i></button></div></div></div>`;
+  const stockWarn=p.stock>0&&p.stock<=10?`<div style="font-size:.65rem;font-weight:700;color:var(--accent);margin-top:.25rem">⚡ נשארו ${p.stock} בלבד!</div>`:'';
+  const isWished=wishlist.has(p.id);
+  return `<div class="prod-card" onclick="openProd(${p.id})"><div class="prod-img-wrap"><img src="${p.imageUrls?.front||p.img}" alt="${p.name}" loading="lazy">${badge}<button class="wish-btn${isWished?' wishlisted':''}" onclick="toggleWish(${p.id},this,event)" title="${isWished?'הסר ממועדפים':'הוסף למועדפים'}" aria-label="מועדפים"><i class="fa${isWished?'s':'r'} fa-heart"></i></button></div><div class="prod-info"><div class="prod-team">${logoImg}${p.team}</div><div class="prod-name">${p.name}</div>${stockWarn}<div class="prod-footer"><span class="prod-price">₪${p.price}</span><button class="prod-add-btn" onclick="event.stopPropagation();addToCart(${p.id},'M')" aria-label="הוסף לעגלה"><i class="fas fa-plus"></i></button></div></div></div>`;
 }
 const _revealObs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');_revealObs.unobserve(e.target);}});},{threshold:0.12});
 function hookReveal(){document.querySelectorAll('.prod-card:not(.reveal),.cat-card:not(.reveal),.why-card:not(.reveal),.section-head:not(.reveal),.hero-stats:not(.reveal)').forEach((el,i)=>{el.classList.add('reveal');const d=i%4;if(d===1)el.classList.add('reveal-delay-1');else if(d===2)el.classList.add('reveal-delay-2');else if(d===3)el.classList.add('reveal-delay-3');_revealObs.observe(el);});}
-function renderFeatured(){const el=document.getElementById('home-featured');if(el){el.innerHTML=PRODS.filter(p=>p.badge).slice(0,4).map(prodCard).join('');hookReveal();}}
+function countUp(el,target,suffix='',duration=1200){
+  const isK=target>=1000;const end=isK?target/1000:target;
+  const start=0;const step=duration/60;let current=start;
+  const t=setInterval(()=>{current+=end/step;if(current>=end){clearInterval(t);el.textContent=(isK?end+'K':end)+suffix;}else{el.textContent=(isK?Math.floor(current)+'K':Math.floor(current))+suffix;}},1000/60);
+}
+function animateHeroStats(){
+  const stats=document.querySelectorAll('#page-home .hero-stat-num');
+  if(!stats.length)return;
+  const vals=[{n:500,s:'+'},{n:50,s:'+'},{n:10000,s:'+'}];
+  stats.forEach((el,i)=>{if(vals[i])countUp(el,vals[i].n,vals[i].s);});
+}
+function renderFeatured(){const el=document.getElementById('home-featured');if(el){el.innerHTML=PRODS.filter(p=>p.badge).slice(0,4).map(prodCard).join('');hookReveal();animateHeroStats();}}
 function renderStore(){
   const s=(document.getElementById('f-search')?.value||'').toLowerCase();
   const lg=document.getElementById('f-league')?.value||'';
@@ -1370,12 +1512,14 @@ function renderStore(){
   document.getElementById('store-empty').style.display=res.length?'none':'block';
   document.getElementById('store-count').textContent=`${res.length} גופיות`;
   hookReveal();
+  renderRecentlyViewed();
 }
 window.renderStore=renderStore;
 function clearFilters(){['f-search','f-league','f-team','f-era'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderStore();}
 window.clearFilters=clearFilters;
 function openProd(id){
   curProd=PRODS.find(p=>p.id===id);if(!curProd)return;
+  trackViewed(id);
   document.getElementById('pd-name').textContent=curProd.name;
   const pdTeamEl=document.getElementById('pd-team');
   const pdLogoEl=document.getElementById('pd-team-logo');
@@ -1409,6 +1553,17 @@ function pickSz(btn,sz){document.querySelectorAll('#page-product .sz').forEach(b
 function setEdition(ed,btn){selEdition=ed;document.querySelectorAll('#page-product .edition-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('pd-edition-desc').textContent=ed==='player'?'גזרת שחקן צמודה — בד ביצועים מקצועי':'גזרת פן רגילה — נוחה לכל יום';}
 window.setEdition=setEdition;
 window.pickSz=pickSz;
+function orderWhatsApp(){
+  if(!curProd)return;
+  const cName=document.getElementById('c-name')?.value||'';
+  const cNum=document.getElementById('c-num')?.value||'';
+  const edLabel=selEdition==='player'?'מהדורת שחקן':'מהדורת פן';
+  let msg=`שלום! אני רוצה להזמין:\n\n👕 ${curProd.name}\nמידה: ${selSz}\nמהדורה: ${edLabel}`;
+  if(cName||cNum)msg+=`\nהדפסה: ${cNum} ${cName}`.trim();
+  msg+=`\nמחיר: ₪${curProd.price}\n\nתודה!`;
+  window.open('https://wa.me/9720587701544?text='+encodeURIComponent(msg),'_blank');
+}
+window.orderWhatsApp=orderWhatsApp;
 function addFromDetail(){
   if(!curProd)return;
   const cName=document.getElementById('c-name')?.value||'';
@@ -1493,12 +1648,27 @@ function fakePaypal(){toast('מעבד תשלום PayPal...');setTimeout(()=>toas
 window.fakePaypal=fakePaypal;
 function receiptPicked(inp){if(inp.files[0])document.getElementById('receipt-label').innerHTML=`<div style="color:#059669;font-size:1.25rem">✓</div><p style="font-size:.8rem;font-weight:600;margin-top:.375rem">${inp.files[0].name}</p>`;}
 window.receiptPicked=receiptPicked;
+function fieldErr(id,msg){
+  const el=document.getElementById(id);if(!el)return;
+  el.style.borderColor='var(--accent)';
+  let hint=el.parentElement.querySelector('.field-err');
+  if(!hint){hint=document.createElement('span');hint.className='field-err';hint.style.cssText='font-size:.7rem;color:var(--accent);margin-top:.2rem;display:block';el.parentElement.appendChild(hint);}
+  hint.textContent=msg;
+  el.addEventListener('input',()=>{el.style.borderColor='';if(hint)hint.textContent='';},{once:true});
+}
+function clearFieldErrs(){document.querySelectorAll('.co-wrap .field-err').forEach(e=>e.remove());document.querySelectorAll('.co-wrap input').forEach(e=>e.style.borderColor='');}
 async function submitOrder(){
+  clearFieldErrs();
   const name=document.getElementById('s-name')?.value?.trim();
   const phone=document.getElementById('s-phone')?.value?.trim();
   const addr=document.getElementById('s-addr')?.value?.trim();
   const city=document.getElementById('s-city')?.value?.trim();
-  if(!name||!phone||!addr||!city){toast('אנא מלא את כל שדות החובה');return;}
+  let hasErr=false;
+  if(!name){fieldErr('s-name','שם מלא נדרש');hasErr=true;}
+  if(!phone){fieldErr('s-phone','מספר טלפון נדרש');hasErr=true;}
+  if(!addr){fieldErr('s-addr','כתובת נדרשת');hasErr=true;}
+  if(!city){fieldErr('s-city','עיר נדרשת');hasErr=true;}
+  if(hasErr){toast('אנא מלא את כל שדות החובה');return;}
   if(!cart.length){toast('העגלה ריקה');return;}
   if(selPay==='bit'){
     if(!document.getElementById('bit-confirm')?.checked){toast('אנא אשר שהתשלום ב-Bit נשלח לפני סיום ההזמנה');return;}
@@ -1508,7 +1678,12 @@ async function submitOrder(){
     const ccExp=document.getElementById('cc-exp')?.value||'';
     const ccCvv=document.getElementById('cc-cvv')?.value||'';
     const ccName=document.getElementById('cc-name')?.value?.trim()||'';
-    if(ccNum.length<15||ccExp.length<5||ccCvv.length<3||!ccName){toast('אנא מלא את פרטי כרטיס האשראי');return;}
+    let cardErr=false;
+    if(ccNum.length<15){fieldErr('cc-num','מספר כרטיס לא תקין');cardErr=true;}
+    if(ccExp.length<5){fieldErr('cc-exp','תוקף לא תקין');cardErr=true;}
+    if(ccCvv.length<3){fieldErr('cc-cvv','CVV לא תקין');cardErr=true;}
+    if(!ccName){fieldErr('cc-name','שם בעל הכרטיס נדרש');cardErr=true;}
+    if(cardErr){toast('אנא מלא את פרטי כרטיס האשראי');return;}
   }
   const oid='JK-'+Date.now().toString().slice(-7);
   const order={order_id:oid,customer_name:name,phone,address:addr+', '+city,city,total:cartTotal(),payment_method:selPay,items:cart,notes:document.getElementById('o-notes')?.value||'',status:'חדש',created_at:new Date().toISOString()};
