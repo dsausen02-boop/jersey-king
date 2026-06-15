@@ -1052,6 +1052,7 @@ function makeCanvasTex(hexColor, label) {
 function corsProxy(url) {
   if (!url) return url;
   if (url.startsWith('https://wsrv.nl/')) return url;
+  if (url.startsWith('https://image.pollinations.ai/')) return url;
   return 'https://wsrv.nl/?url=' + encodeURIComponent(url) + '&w=600&h=800&fit=cover';
 }
 
